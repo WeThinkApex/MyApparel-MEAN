@@ -1,0 +1,214 @@
+/* Container and Grid */
+.premium-boutiques {
+  padding: 40px 0;
+  background-color: #1a1a1a;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.section-title {
+  text-align: left;
+  font-size: 32px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 30px;
+  padding-left: 15px;
+}
+
+.boutiques-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 20px;
+}
+
+/* Boutique Card */
+.boutique-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  text-decoration: none;
+  color: #333;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.boutique-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Image and Hover Overlay */
+.image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: opacity 0.3s ease;
+}
+
+.boutique-card:hover .image-overlay {
+  opacity: 1;
+}
+
+/* Sizes and Add to Cart */
+/* .size-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 15px;
+} */
+
+/* .size-item {
+  background-color: #fff;
+  color: #333;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+} */
+
+/* .add-to-cart-btn {
+  background-color: #ff4d6d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #ff3357;
+} */
+
+/* Card Content */
+.card-content {
+  padding: 16px;
+  text-align: left;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  text-transform: uppercase;
+}
+
+.brand-name {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.price-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.card-description-price {
+  font-size: 16px;
+  color: #ff4d6d;
+  font-weight: 600;
+}
+
+.card-description-original-price {
+  font-size: 14px;
+  color: #666;
+  text-decoration: line-through;
+}
+
+.card-description-discount {
+  font-size: 14px;
+  color: #007600;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 992px) {
+  .boutiques-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .boutiques-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+}
+
+/* .hover-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  background-color: #f8f8f8;
+  border-top: 1px solid #ddd;
+} */
+
+.size-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.size-item {
+  background-color: #fff;
+  color: #333;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.add-to-cart-btn {
+  background-color: #ff4d6d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #ff3357;
+}

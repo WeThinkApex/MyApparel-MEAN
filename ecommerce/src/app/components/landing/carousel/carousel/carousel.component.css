@@ -1,0 +1,135 @@
+/* carousel.component.css */
+.page-container {
+  width: 100%;
+  background: #ffffff;
+  padding: 30px  0;
+  margin-top: 70px;
+}
+
+.home-carousel {
+  margin-bottom: 30px;
+}
+
+.carousel-outer-container {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.carousel-slide-container {
+  width: 100%;
+  height: 0;
+  padding-bottom: 35%;
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.slide-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Custom Navigation Arrows */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 45px;
+  height: 45px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  transition: all 0.2s ease;
+}
+
+.carousel-arrow:hover {
+  background: #ffffff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.carousel-arrow.prev {
+  left: -10px;
+}
+
+.carousel-arrow.next {
+  right: -10px;
+}
+
+.arrow-icon {
+  font-size: 28px;
+  line-height: 1;
+  color: #666;
+  user-select: none;
+}
+
+/* Hide default NgbCarousel controls */
+::ng-deep .carousel-control-prev,
+::ng-deep .carousel-control-next,
+::ng-deep .carousel-indicators {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1440px) {
+  .carousel-outer-container {
+    max-width: 1200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .carousel-outer-container {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-outer-container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .carousel-slide-container {
+    padding-bottom: 45%;
+  }
+
+  .carousel-arrow {
+    width: 35px;
+    height: 35px;
+  }
+
+  .arrow-icon {
+    font-size: 24px;
+  }
+  
+  .carousel-arrow.prev {
+    left: 5px;
+  }
+
+  .carousel-arrow.next {
+    right: 5px;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

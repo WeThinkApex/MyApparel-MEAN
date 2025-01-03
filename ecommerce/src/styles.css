@@ -1,0 +1,56 @@
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__surface {
+    --mdc-snackbar-container-color: #0d8808 !important;
+    color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__actions .mat-mdc-button {
+    color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__surface {
+    --mdc-snackbar-container-color: #f44336 !important;
+    color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__actions .mat-mdc-button {
+    color: #fff !important;
+}
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__actions .mat-mdc-button:hover {
+    background-color: transparent!important; 
+    color: white !important; 
+}
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__actions .mat-mdc-button:hover {
+    background-color : transparent !important; /* Subtle hover effect */
+    color: white !important; 
+} 
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center; 
+    padding: 0 16px;
+}
+
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-label {
+    flex-grow: 1;
+    margin-right: 16px;
+    font-weight: 500 !important;
+}
+
+.mat-mdc-snack-bar-container .mat-mdc-button {
+    margin: 0;
+    padding: 6px 8px;
+    height: auto;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+@import '@angular/material/prebuilt-themes/indigo-pink.css';

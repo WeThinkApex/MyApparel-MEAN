@@ -1,0 +1,29 @@
+<section class="premium-boutiques">
+  <div class="container">
+    <h2 class="section-title">New Arrivals</h2>
+
+    <div class="boutiques-grid">
+      <div *ngFor="let product of products" class="boutique-card">
+        <div class="image-container">
+          <img [src]="product.imageUrl" [alt]="product.title" class="card-image">
+        </div>
+        <div class="card-content">
+          <div class="brand-name">{{ product.brand }}</div>
+          <h3 class="card-title">{{ product.title }}</h3>
+          <div class="price-container">
+            <span class="card-description-price">₹{{ product.price }}</span>
+            <span class="card-description-original-price">₹{{ product.originalPrice }}</span>
+            <span class="card-description-discount">({{ calculateDiscount(product) }}% OFF)</span>
+          </div>
+          <div class="card-description">Get it {{ product.deliveryInfo }}</div>
+        </div>
+        <div class="hover-content">
+          <div class="size-list">
+            <span class="size-item" *ngFor="let size of product.sizes">{{ size }}</span>
+          </div>
+          <button class="add-to-cart-btn" (click)="addToCart(product, $event)">ADD TO CART</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

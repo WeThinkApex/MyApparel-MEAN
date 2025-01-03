@@ -1,0 +1,53 @@
+<div class="admin-container">
+  <!-- Header -->
+  <header class="admin-header">
+      <div class="header-title">
+          <h1>Admin Panel</h1>
+      </div>
+      <div class="header-actions">
+          <button class="logout-btn" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+      </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="admin-content">
+      <!-- Sidebar -->
+      <nav class="admin-sidebar">
+          <div class="sidebar-item active">
+              <i class="fas fa-box"></i>
+              <span>Products</span>
+          </div>
+      </nav>
+
+      <!-- Main Area -->
+      <main class="main-content">
+          <div class="content-header">
+              <h2>Products</h2>
+              <button class="add-btn" (click)="openAddProductDialog()">
+                  Add New Product
+              </button>
+          </div>
+
+          <div class="products-grid">
+              <div class="product-card" *ngFor="let product of products">
+                  <div class="product-image">
+                      <img [src]="product.imageUrl" [alt]="product.title">
+                  </div>
+                  <div class="product-details">
+                      <h3>{{product.title}}</h3>
+                      <div class="price-info">
+                          <span class="original-price">${{product.originalPrice}}</span>
+                          <span class="current-price">${{product.price}}</span>
+                      </div>
+                      <div class="product-actions">
+                          <button class="edit-btn" (click)="editProduct(product)">Edit</button>
+                          <button class="delete-btn" (click)="deleteProduct(product._id)">Delete</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </main>
+  </div>
+</div>

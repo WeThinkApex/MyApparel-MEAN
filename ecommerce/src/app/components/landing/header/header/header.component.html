@@ -1,0 +1,47 @@
+<!-- header.component.html -->
+<header class="main-header">
+  <div class="nav-container">
+    <div class="logo-container">
+      <img [src]="logoUrl" (click)="navigateHome()" alt="Logo">
+    </div>
+
+    <div class="search-container">
+      <!-- Search implementation -->
+    </div>
+
+    <nav class="header-nav">
+      <ul class="nav-list">
+        <li *ngFor="let category of categories">
+          <a class="nav-link" [routerLink]="[category.path]" routerLinkActive="active">
+            {{category.name}}
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="user-actions">
+
+<div *ngIf="isAuthenticated">
+      <button mat-button  (click)="openAccountDialog($event)">
+        <mat-icon>person</mat-icon>
+        <span>My Account</span>
+      </button>
+    </div>
+      <div *ngIf="!isAuthenticated">
+        <a mat-button routerLink="/login">Login/Register</a>
+      </div>
+
+      <!-- <mat-menu #accountMenu="matMenu">
+        <button mat-menu-item *ngIf="isAuthenticated">Profile</button>
+        <button mat-menu-item *ngIf="isAuthenticated">Orders</button>
+        <button mat-menu-item *ngIf="isAuthenticated" (click)="logout()">Logout</button>
+        <button mat-menu-item *ngIf="!isAuthenticated" routerLink="/login">Login/Register</button>
+      </mat-menu> -->
+      
+      <button mat-icon-button [matBadge]="cartItemCount" matBadgeColor="warn">
+        <mat-icon>shopping_cart</mat-icon>
+      </button>
+    </div>
+  </div>
+</header>
+

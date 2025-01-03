@@ -1,0 +1,35 @@
+.main-nav {
+    background-color: #FFD700;
+    width: 100%;
+    padding: 10px 0;
+  }
+  
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+  }
+  
+  .nav-link {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    transition: color 0.3s;
+  }
+  
+  .nav-link:hover {
+    color: #000;
+  }
+  
+  .active {
+    color: #000;
+    font-weight: bold;
+  }

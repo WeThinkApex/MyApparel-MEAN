@@ -1,0 +1,44 @@
+.dialogClass {
+    max-width: 320px; /* Slightly wider for better readability */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for a modern look */
+    background: #fff;
+    padding: 20px; /* Add some padding around the content */
+  }
+  
+  .dialog-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px; /* Space between title and content */
+    color: #333; /* Dark text for better readability */
+    text-align: center;
+  }
+  
+  .dialog-content {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555; /* Softer text color */
+    margin-bottom: 20px; /* Space between content and button */
+  }
+  
+  .dialog-content p {
+    margin: 5px 0; /* Ensure text doesn't crowd together */
+  }
+  
+  .logoutClass {
+    margin-top: 20px;
+    background-color: #e65c36;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 10px 20px; /* Add padding to the button */
+    width: 100%;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logoutClass:hover {
+    background-color: #c84f28; /* Darken on hover */
+  }
+  
