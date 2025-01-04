@@ -1,0 +1,77 @@
+<p>product-details-component works!</p>
+<div class="product-details-container" *ngIf="product">
+    <div class="product-gallery">
+      <div class="main-image">
+        <img [src]="product.imageUrl" [alt]="product.title">
+      </div>
+    </div>
+  
+    <div class="product-info">
+      <div class="brand">{{ product.brand }}</div>
+      <h1 class="title">{{ product.title }}</h1>
+  
+      <div class="price-container">
+        <span class="current-price">₹{{ product.price }}</span>
+        <span class="original-price">MRP: ₹{{ product.originalPrice }}</span>
+        <span class="discount">
+          ({{ ((product.originalPrice - product.price) / product.originalPrice * 100) | number:'1.0-0' }}% OFF)
+        </span>
+      </div>
+  
+      <div class="size-section">
+        <div class="size-header">
+          <h3>Select Size</h3>
+          <a href="#" class="size-chart">SIZE CHART</a>
+        </div>
+        <div class="size-options">
+          <button *ngFor="let sizeOption of product.sizes"
+                  [class.selected]="selectedSize === sizeOption.size"
+                  [class.out-of-stock]="!sizeOption.inStock"
+                  (click)="sizeOption.inStock && selectSize(sizeOption.size)"
+                  class="size-button">
+            {{ sizeOption.size }}
+          </button>
+        </div>
+      </div>
+  
+      <div class="delivery-section">
+        <h3>Delivery Options</h3>
+        <div class="pincode-checker">
+          <input type="text" [(ngModel)]="pincode" placeholder="Enter Pincode">
+          <button (click)="checkDelivery()">Check</button>
+        </div>
+        <div class="delivery-info" *ngIf="pincode">
+          <p>{{ product.deliveryInfo }}</p>
+          <div class="delivery-features">
+            <span>COD Available</span>
+            <span>30 days Return/Exchange</span>
+          </div>
+        </div>
+      </div>
+  
+      <button class="add-to-cart-btn" (click)="addToCart()" [disabled]="!selectedSize">
+        ADD TO CART
+      </button>
+  
+      <div class="product-details">
+        <div class="detail-section">
+          <h3>Product Details</h3>
+          <p>{{ product.description }}</p>
+        </div>
+  
+        <div class="detail-section">
+          <h3>Material & Care</h3>
+          <ul>
+            <li *ngFor="let care of product.materialCare">{{ care }}</li>
+          </ul>
+        </div>
+  
+        <div class="detail-section">
+          <h3>Specifications</h3>
+          <ul>
+            <li *ngFor="let spec of product.specifications">{{ spec }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>

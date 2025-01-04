@@ -21,7 +21,7 @@
 
 .boutiques-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
   margin-top: 20px;
 }
@@ -75,40 +75,6 @@
   opacity: 1;
 }
 
-/* Sizes and Add to Cart */
-/* .size-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 15px;
-} */
-
-/* .size-item {
-  background-color: #fff;
-  color: #333;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 14px;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-} */
-
-/* .add-to-cart-btn {
-  background-color: #ff4d6d;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.add-to-cart-btn:hover {
-  background-color: #ff3357;
-} */
-
 /* Card Content */
 .card-content {
   padding: 16px;
@@ -131,8 +97,8 @@
 
 .price-container {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
   margin-bottom: 8px;
 }
 
@@ -146,39 +112,23 @@
   font-size: 14px;
   color: #666;
   text-decoration: line-through;
+  margin-left: 8px;
 }
 
 .card-description-discount {
   font-size: 14px;
-  color: #007600;
+  color: #ff4d6d;
 }
 
-/* Media Queries for Responsiveness */
-@media (max-width: 992px) {
-  .boutiques-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 576px) {
-  .boutiques-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .section-title {
-    font-size: 24px;
-  }
-}
-
-/* .hover-content {
+.hover-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 10px 0;
-  background-color: #f8f8f8;
   border-top: 1px solid #ddd;
-} */
+  margin-top: 250px;
+}
 
 .size-list {
   display: flex;
@@ -211,4 +161,33 @@
 
 .add-to-cart-btn:hover {
   background-color: #ff3357;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+  .boutiques-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .boutiques-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .boutiques-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .boutiques-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
 }

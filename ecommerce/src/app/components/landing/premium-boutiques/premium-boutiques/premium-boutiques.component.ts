@@ -1,5 +1,6 @@
 // premium-boutiques.component.ts
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 interface Product {
   brand: string;
@@ -18,6 +19,7 @@ interface Product {
   styleUrls: ['./premium-boutiques.component.css']
 })
 export class PremiumBoutiquesComponent {
+  constructor(private router: Router){}
   products: Product[] = [
     {
       brand: 'Mark & Mia',
@@ -25,7 +27,7 @@ export class PremiumBoutiquesComponent {
       imageUrl: 'assets/premium/premium-1.jpg',
       price: 1799,
       originalPrice: 3599,
-      sizes: ['2Y', '3Y', '4Y', '5Y', '6Y'],
+      sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
       deliveryInfo: 'Get it Tuesday, Dec 19',
       link: '/product/high-low-sequined-party-frock',
       
@@ -36,7 +38,8 @@ export class PremiumBoutiquesComponent {
       imageUrl: 'assets/premium/premium-2.jpg',
       price: 1499,
       originalPrice: 2999,
-      sizes: ['2Y', '3Y', '4Y', '5Y', '6Y'],
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
       deliveryInfo: 'Get it Tuesday, Dec 19',
       link: '/product/full-sleeves-party-suit'
     },
@@ -46,7 +49,8 @@ export class PremiumBoutiquesComponent {
       imageUrl: 'assets/premium/premium-2.jpg',
       price: 1499,
       originalPrice: 2999,
-      sizes: ['2Y', '3Y', '4Y', '5Y', '6Y'],
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
       deliveryInfo: 'Get it Tuesday, Dec 19',
       link: '/product/full-sleeves-party-suit'
     },
@@ -56,7 +60,8 @@ export class PremiumBoutiquesComponent {
       imageUrl: 'assets/premium/premium-2.jpg',
       price: 1499,
       originalPrice: 2999,
-      sizes: ['2Y', '3Y', '4Y', '5Y', '6Y'],
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
       deliveryInfo: 'Get it Tuesday, Dec 19',
       link: '/product/full-sleeves-party-suit'
     },
@@ -66,7 +71,8 @@ export class PremiumBoutiquesComponent {
       imageUrl: 'assets/premium/premium-2.jpg',
       price: 1499,
       originalPrice: 2999,
-      sizes: ['2Y', '3Y', '4Y', '5Y', '6Y'],
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
       deliveryInfo: 'Get it Tuesday, Dec 19',
       link: '/product/full-sleeves-party-suit'
     },
@@ -76,7 +82,162 @@ export class PremiumBoutiquesComponent {
       imageUrl: 'assets/premium/premium-2.jpg',
       price: 1499,
       originalPrice: 2999,
-      sizes: ['2Y', '3Y', '4Y', '5Y', '6Y'],
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
+      deliveryInfo: 'Get it Tuesday, Dec 19',
+      link: '/product/full-sleeves-party-suit'
+    },
+    {
+      brand: 'Mark & Mia',
+      title: 'Full Sleeves Party Suit Solid Colour - Blue',
+      imageUrl: 'assets/premium/premium-2.jpg',
+      price: 1499,
+      originalPrice: 2999,
+           sizes: ['2Y', '3Y', '4Y', '5Y', '6Y','7Y','8Y','9Y'],
+
       deliveryInfo: 'Get it Tuesday, Dec 19',
       link: '/product/full-sleeves-party-suit'
     },
@@ -93,5 +254,10 @@ export class PremiumBoutiquesComponent {
   calculateDiscount(product: { originalPrice: number; price: number; }) {
     const discount = ((product.originalPrice - product.price) / product.originalPrice) * 100;
     return Math.round(discount);
+  }
+  navigateToProduct(product: Product) {
+    // You might want to use a proper ID here instead of encoding the title
+    const productId = encodeURIComponent(product.title.toLowerCase().replace(/ /g, '-'));
+    this.router.navigate(['/product', productId]);
   }
 }

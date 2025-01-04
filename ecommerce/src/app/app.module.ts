@@ -17,6 +17,7 @@ import { HomeModule } from './components/landing/home.module';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminpanelModule } from './components/adminpanel/add-products/adminpanel.module';
+import { ProductsModule } from './components/products/products.module';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { AdminpanelModule } from './components/adminpanel/add-products/adminpane
     FormsModule,
     MatDialogModule,
     HomeModule,
+    ProductsModule,
     AuthModule,
     AdminpanelModule,
     MatSnackBarModule,
