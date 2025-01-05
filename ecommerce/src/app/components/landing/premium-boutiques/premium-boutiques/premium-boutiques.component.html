@@ -5,7 +5,7 @@
     <div class="boutiques-grid">
       <div *ngFor="let product of products" class="boutique-card" (click)="navigateToProduct(product)">
         <div class="image-container">
-          <img [src]="product.imageUrl" [alt]="product.title" class="card-image">
+          <img [src]="product.mainImage" [alt]="product.title" (error)="handleImageError($event)" class="card-image">
           
         </div>
         <div class="card-content">
@@ -20,12 +20,24 @@
           <div class="card-description">Get it {{ product.deliveryInfo }} 
             
             <div class="image-overlay">
-            <div class="hover-content">
-              <div class="size-list">
-                <span class="size-item" *ngFor="let size of product.sizes">{{ size }}</span>
+              <div class="hover-content">
+                <div class="size-list">
+                  <span class="size-item" *ngFor="let size of getLimitedSizes(product.sizes, 4)" [class.out-of-stock]="size.stock === 0"
+                    [title]="size.stock === 0 ? 'Out of Stock' : size.stock + ' items left'">
+                    {{ size.name }}
+                    <small *ngIf="size.stock > 0" class="stock-info">({{ size.stock }})</small>
+                  </span>
+                  <span *ngIf="product.sizes.length > 4" class="size-item more-btn">
+                    +{{ product.sizes.length - 4 }} more
+                  </span>
+                </div>
+                  <button 
+                    class="add-to-cart-btn" 
+                    (click)="addToCart(product, $event)" 
+                    [disabled]="isOutOfStock(product)">
+                    {{ getButtonText(product) }}
+                  </button>
               </div>
-              <button class="add-to-cart-btn" (click)="addToCart(product, $event)">ADD TO CART</button>
-            </div>
           </div></div>
         </div>
       </div>

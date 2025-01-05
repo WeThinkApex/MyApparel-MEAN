@@ -4,43 +4,89 @@ const path = require('path');
 
 exports.createProduct = async (req, res) => {
   try {
-    const imageUrl = req.file ? `/uploads/products/${req.file.filename}` : null;
-    if (!imageUrl) {
-      return res.status(400).json({ message: 'Product image is required' });
+    if (!req.files || !req.files.mainImage) {
+      return res.status(400).json({ message: 'Main product image is required' });
     }
+    const mainImageUrl = `/uploads/products/${req.files.mainImage[0].filename}`;
+    const additionalImageUrls = [];
+    if (req.files.additionalImages) {
+      req.files.additionalImages.forEach(file => {
+        additionalImageUrls.push(`/uploads/products/${file.filename}`);
+      });
+    }
+    const sizes = JSON.parse(req.body.sizes || '[]');
+    const sizeAndFit = JSON.parse(req.body.sizeAndFit || '[]');
+    const materialCare = JSON.parse(req.body.materialCare || '[]');
+    const productDetails = JSON.parse(req.body.productDetails || '[]');
+
     const product = new Product({
       title: req.body.title,
       description: req.body.description,
       price: req.body.price,
-      salePrice: req.body.salePrice,
+      originalPrice: req.body.originalPrice,
+      clubPrice: req.body.clubPrice,
       category: req.body.category,
       brand: req.body.brand,
-      imageUrl,
-      stock: req.body.stock || 0
+      mainImage: mainImageUrl,
+      additionalImages: additionalImageUrls,
+      sizes: sizes,
+      sizeAndFit: sizeAndFit,
+      materialCare: materialCare,
+      productDetails: productDetails,
+      deliveryInfo: req.body.deliveryInfo,
+      isActive: req.body.isActive === 'true'
     });
+
     const savedProduct = await product.save();
     res.status(201).json(savedProduct);
   } catch (error) {
-    if (req.file) {
-      await fs.unlink(req.file.path).catch(console.error);
+    if (req.files) {
+      Object.values(req.files).flat().forEach(async (file) => {
+        try {
+          await fs.unlink(file.path);
+        } catch (unlinkError) {
+          console.error('Error deleting file:', unlinkError);
+        }
+      });
     }
     res.status(400).json({ message: error.message });
   }
 };
-
+// Get all products with filtering and pagination
 exports.getProducts = async (req, res) => {
   try {
-    const { category, brand, search, sort, page = 1, limit = 10 } = req.query;
-    const query = {};
+    const {
+      category,
+      brand,
+      search,
+      sort,
+      page = 1,
+      limit = 10,
+      minPrice,
+      maxPrice,
+      inStock
+    } = req.query;
+
+    const query = { isActive: true };
+    // Apply filters
     if (category) query.category = category;
     if (brand) query.brand = brand;
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
+    }
+    if (inStock === 'true') query.totalStock = { $gt: 0 };
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } }
+        { description: { $regex: search, $options: 'i' } },
+        { brand: { $regex: search, $options: 'i' } }
       ];
     }
-    const skip = (page - 1) * limit;
+    // Calculate skip value for pagination
+    const skip = (Number(page) - 1) * Number(limit);
+    // Build sort object
     let sortObj = {};
     if (sort) {
       const [field, order] = sort.split(':');
@@ -59,16 +105,21 @@ exports.getProducts = async (req, res) => {
     res.json({
       products,
       currentPage: Number(page),
-      totalPages: Math.ceil(total / limit),
+      totalPages: Math.ceil(total / Number(limit)),
       total
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+// Get single product
 exports.getProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({
+      _id: req.params.id,
+      isActive: true
+    });
+
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
@@ -78,59 +129,110 @@ exports.getProduct = async (req, res) => {
   }
 };
 
+// Update product
 exports.updateProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    if (req.file) {
-      if (product.imageUrl) {
-        const oldImagePath = path.join(__dirname, '..', 'public', product.imageUrl);
-        await fs.unlink(oldImagePath).catch(console.error);
+    // Handle image updates
+    if (req.files?.length > 0) {
+      const mainImage = req.files.find(file => file.fieldname === 'mainImage');
+      const additionalImages = req.files.filter(file => file.fieldname === 'additionalImages');
+
+      if (mainImage) {
+        if (product.mainImage) {
+          const oldMainImagePath = path.join(__dirname, '..', 'public', product.mainImage);
+          await fs.unlink(oldMainImagePath).catch(console.error);
+        }
+        product.mainImage = `/uploads/products/${mainImage.filename}`;
       }
-      product.imageUrl = `/uploads/products/${req.file.filename}`;
+
+      if (additionalImages.length > 0) {
+        // Delete old additional images
+        for (const image of product.images) {
+          const oldImagePath = path.join(__dirname, '..', 'public', image.url);
+          await fs.unlink(oldImagePath).catch(console.error);
+        }
+        product.images = additionalImages.map(file => ({
+          url: `/uploads/products/${file.filename}`,
+          alt: product.title
+        }));
+      }
     }
-    Object.keys(req.body).forEach(key => {
-      if (req.body[key] !== undefined) {
-        product[key] = req.body[key];
+    // Update other fields
+    const updateFields = [
+      'title', 'description', 'price', 'originalPrice', 'clubPrice',
+      'category', 'brand', 'sizeAndFit', 'materialCare', 'productDetails',
+      'deliveryInfo'
+    ];
+
+    updateFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        if (['sizeAndFit', 'materialCare', 'productDetails'].includes(field)) {
+          product[field] = JSON.parse(req.body[field]);
+        } else {
+          product[field] = req.body[field];
+        }
       }
     });
+    // Update sizes if provided
+    if (req.body.sizes) {
+      product.sizes = JSON.parse(req.body.sizes);
+    }
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);
   } catch (error) {
-    if (req.file) {
-      await fs.unlink(req.file.path).catch(console.error);
+    if (req.files) {
+      req.files.forEach(file => {
+        fs.unlink(file.path).catch(console.error);
+      });
     }
     res.status(400).json({ message: error.message });
   }
 };
+// Delete product
 exports.deleteProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    if (product.imageUrl) {
-      const imagePath = path.join(__dirname, '..', product.imageUrl); 
-      try {
-        await fs.access(imagePath); 
-        await fs.unlink(imagePath); 
-        console.log("Image file deleted:", imagePath);
-      } catch (err) {
-        if (err.code === 'ENOENT') {
-          console.log("Image file does not exist, skipping deletion:", imagePath);
-        } else {
-          throw err; 
-        }
-      }
+    // Delete all associated images
+    const imagePaths = [
+      product.mainImage,
+      ...product.images.map(img => img.url)
+    ];
+
+    for (const imagePath of imagePaths) {
+      const fullPath = path.join(__dirname, '..', 'public', imagePath);
+      await fs.unlink(fullPath).catch(console.error);
     }
-    await product.deleteOne(); // Use deleteOne explicitly
+    await product.deleteOne();
     res.json({ message: 'Product removed successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
+// Check stock availability
+exports.checkStockAvailability = async (req, res) => {
+  try {
+    const { productId, size } = req.params;
+    const product = await Product.findById(productId);
+    
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
 
+    const sizeData = product.sizes.find(s => s.name === size);
+    res.json({
+      available: sizeData ? sizeData.stock > 0 : false,
+      stock: sizeData ? sizeData.stock : 0
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

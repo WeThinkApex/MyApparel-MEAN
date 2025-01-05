@@ -1,8 +1,14 @@
+// add-products.component.ts
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminPanelSService } from '../adminpanel.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+
+interface Size {
+  name: string;
+  stock: number;
+}
 
 @Component({
   selector: 'app-add-product-dialog',
@@ -10,14 +16,16 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
   styleUrls: ['./add-products.component.css']
 })
 export class AddProductDialogComponent implements OnInit {
-  productForm: FormGroup;
-  imagePreview: string | null = null;
-  selectedFile: File | null = null;
+  productForm: FormGroup | any;
+  mainImagePreview: string | null = null;
+  selectedMainImage: File | null = null;
+  additionalImages: { file: File, preview: string }[] = [];
   isSubmitting = false;
   categories = [
     { value: 'GIRLS FASHION', label: 'Girls Fashion' },
     { value: 'BOYS FASHION', label: 'Boys Fashion' },
   ];
+  availableSizes = ['2Y', '3Y', '4Y', '5Y', '6Y', '7Y', '8Y', '9Y', '10Y'];
 
   constructor(
     private fb: FormBuilder,
@@ -26,103 +34,237 @@ export class AddProductDialogComponent implements OnInit {
     private snackBar: SnackbarService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.productForm = this.fb.group({
-      title: ['', Validators.required],
-      description: [''],
-      price: ['', [Validators.required, Validators.min(0)]],
-      category: ['', Validators.required],
-      stock: ['', Validators.required]
-    });
-
+    this.initializeForm();
     if (data?.product) {
-      this.productForm.patchValue({
-        title: data.product.title,
-        description: data.product.description,
-        price: data.product.price,
-        category: data.product.category,
-        stock: data.product.stock
+      this.patchFormWithExistingProduct(data.product);
+    }
+  }
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+  private loadCategories(): void {
+    this.categories = [
+      { value: 'GIRLS FASHION', label: 'Girls Fashion' },
+      { value: 'BOYS FASHION', label: 'Boys Fashion' },
+      
+    ];
+  }
+  private initializeForm(): void {
+    this.productForm = this.fb.group({
+      title: ['', [Validators.required, Validators.minLength(3)]],
+      description: ['', Validators.required],
+      price: ['', [Validators.required, Validators.min(0)]],
+      originalPrice: ['', [Validators.required, Validators.min(0)]],
+      // clubPrice: [''],
+      category: ['', Validators.required],
+      brand: ['', Validators.required],
+      sizes: this.fb.array([]),
+      sizeAndFit: this.fb.array(['']),
+      materialCare: this.fb.array(['']),
+      productDetails: this.fb.array(['']),
+      deliveryInfo: ['Standard delivery in 4-5 business days'],
+      isActive: [true]
+    });
+    this.availableSizes.forEach(size => {
+      this.addSize(size);
+    });
+  }
+  get sizesFormArray() {
+    return this.productForm.get('sizes') as FormArray;
+  }
+
+  get sizeAndFitFormArray() {
+    return this.productForm.get('sizeAndFit') as FormArray;
+  }
+
+  get materialCareFormArray() {
+    return this.productForm.get('materialCare') as FormArray;
+  }
+
+  get productDetailsFormArray() {
+    return this.productForm.get('productDetails') as FormArray;
+  }
+
+  // Add/Remove form array items
+  addSize(sizeName: string) {
+    const sizeGroup = this.fb.group({
+      name: [sizeName],
+      stock: [0, [Validators.required, Validators.min(0)]]
+    });
+    this.sizesFormArray.push(sizeGroup);
+  }
+
+  addSizeAndFit() {
+    this.sizeAndFitFormArray.push(this.fb.control(''));
+  }
+
+  addMaterialCare() {
+    this.materialCareFormArray.push(this.fb.control(''));
+  }
+
+  addProductDetail() {
+    this.productDetailsFormArray.push(this.fb.control(''));
+  }
+
+  removeArrayItem(array: FormArray, index: number) {
+    array.removeAt(index);
+  }
+
+  private patchFormWithExistingProduct(product: any): void {
+    // Basic form fields
+    this.productForm.patchValue({
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      category: product.category,
+      brand: product.brand,
+      deliveryInfo: product.deliveryInfo,
+      isActive: product.isActive
+    });
+    // Set main image preview
+    if (product.mainImage) {
+      this.mainImagePreview = product.mainImage;
+      console.log("inside ", this.mainImagePreview )
+    }
+
+    // Handle additional images
+    if (product.additionalImages && product.additionalImages.length > 0) {
+      this.additionalImages = product.additionalImages.map((img: string) => ({
+        file: null,
+        preview: img
+      }));
+    }
+    // Clear and patch size array
+    this.sizesFormArray.clear();
+    if (product.sizes && product.sizes.length > 0) {
+      product.sizes.forEach((size: Size) => {
+        this.sizesFormArray.push(this.fb.group({
+          name: [size.name],
+          stock: [size.stock]
+        }));
       });
-      this.imagePreview = data.product.imageUrl;
+    } else {
+      this.availableSizes.forEach(size => {
+        this.addSize(size);
+      });
     }
-  }
+    // Handle arrays with proper null checks
+    ['sizeAndFit', 'materialCare', 'productDetails'].forEach(arrayName => {
+      const formArray = this.productForm.get(arrayName) as FormArray;
+      formArray.clear();
+      if (product[arrayName] && Array.isArray(product[arrayName])) {
+        product[arrayName].forEach((item: string) => {
+          formArray.push(this.fb.control(item));
+        });
+      }
+      // If array is empty, add at least one empty control
+      if (formArray.length === 0) {
+        formArray.push(this.fb.control(''));
+      }
+    });
+}
 
-  ngOnInit() {}
-
-  onFileSelected(event: any) {
+  // File handling methods
+  onMainImageSelected(event: any) {
     const file = event.target.files[0];
-    this.handleFile(file);
+    this.handleMainImage(file);
   }
 
-  onDragOver(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
+  onAdditionalImagesSelected(event: any) {
+    const files = event.target.files;
+    this.handleAdditionalImages(Array.from(files));
   }
 
-  onDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    
-    const files = event.dataTransfer?.files;
-    if (files && files.length > 0) {
-      this.handleFile(files[0]);
-    }
-  }
-
-  private handleFile(file: File) {
+  private handleMainImage(file: File) {
     if (file && file.type.startsWith('image/')) {
-      this.selectedFile = file;
+      this.selectedMainImage = file;
       const reader = new FileReader();
       reader.onload = () => {
-        this.imagePreview = reader.result as string;
+        this.mainImagePreview = reader.result as string;
       };
       reader.readAsDataURL(file);
     } else {
-      this.snackBar.successSnackBar('Please select an image file')
+      this.snackBar.errorSnackBar('Please select a valid image file');
     }
   }
 
-  onSubmit() {
-    if (this.productForm.valid) {
-      this.isSubmitting = true;
-      const formData = new FormData();
-      formData.append('title', this.productForm.get('title')?.value);
-      formData.append('description', this.productForm.get('description')?.value);
-      formData.append('price', this.productForm.get('price')?.value);
-      formData.append('category', this.productForm.get('category')?.value);
-      formData.append('stock', this.productForm.get('stock')?.value);
-      formData.append('brand', 'Default Brand'); 
-      // Only append the file if a new one is selected
-      if (this.selectedFile) {
-        formData.append('image', this.selectedFile);
+  private handleAdditionalImages(files: File[]) {
+    files.forEach(file => {
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.additionalImages.push({
+            file: file,
+            preview: reader.result as string
+          });
+        };
+        reader.readAsDataURL(file);
       }
-  
-      // Determine whether to create or update the product
-      const request = this.data?.product?._id
-        ? this.productService.updateProduct(this.data.product._id, formData)
-        : this.productService.createProduct(formData);
-  
-      request.subscribe({
-        next: (response) => {
-          const successMessage =
-            this.data?.mode === 'edit'
-              ? 'Product updated successfully'
-              : 'Product added successfully';
-          this.snackBar.successSnackBar(successMessage)
-    this.dialogRef.close(true);
-        },
-        error: (error) => {
-          console.error('Error saving product:', error);
-          this.isSubmitting = false;
-          this.snackBar.errorSnackBar('Error saving product')
-
-        },
-      });
-    } else {
-      // Form validation error
-      this.snackBar.errorSnackBar('Please fill all required fields')
-    }
+    });
   }
-  
+
+  removeAdditionalImage(index: number) {
+    this.additionalImages.splice(index, 1);
+  }
+
+onSubmit() {
+  if (this.productForm.valid) {
+    this.isSubmitting = true;
+    const formData = new FormData();
+    Object.keys(this.productForm.value).forEach(key => {
+      if (key !== 'sizes' && key !== 'sizeAndFit' && 
+          key !== 'materialCare' && key !== 'productDetails') {
+        formData.append(key, this.productForm.get(key)?.value);
+      }
+    });
+    formData.append('sizes', JSON.stringify(this.sizesFormArray.value));
+    formData.append('sizeAndFit', JSON.stringify(this.sizeAndFitFormArray.value));
+    formData.append('materialCare', JSON.stringify(this.materialCareFormArray.value));
+    formData.append('productDetails', JSON.stringify(this.productDetailsFormArray.value));
+    // Handle main image
+    if (this.selectedMainImage) {
+      formData.append('mainImage', this.selectedMainImage);
+    }
+
+    // Handle additional images
+    this.additionalImages.forEach((img, index) => {
+      if (img.file) {
+        formData.append(`additionalImages`, img.file);
+      }
+    });
+
+    const request = this.data?.product?._id
+      ? this.productService.updateProduct(this.data.product._id, formData)
+      : this.productService.createProduct(formData);
+
+    request.subscribe({
+      next: (response) => {
+        const successMessage = this.data?.mode === 'edit'
+          ? 'Product updated successfully'
+          : 'Product added successfully';
+        this.snackBar.successSnackBar(successMessage);
+        this.dialogRef.close(true);
+      },
+      error: (error) => {
+        console.error('Error saving product:', error);
+        this.isSubmitting = false;
+        this.snackBar.errorSnackBar('Error saving product: ' + error.message);
+      }
+    });
+  } else {
+    this.snackBar.errorSnackBar('Please fill all required fields');
+    this.markFormGroupTouched(this.productForm);
+  }
+}
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
 
   onClose() {
     this.dialogRef.close();

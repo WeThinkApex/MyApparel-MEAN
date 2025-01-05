@@ -8,21 +8,38 @@ const {
   getProducts,
   getProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  checkStockAvailability
 } = require('../controllers/productController');
 
-// Protect all routes
+// Configure upload fields for multiple images
+const uploadFields = [
+  { name: 'mainImage', maxCount: 1 },
+  { name: 'additionalImages', maxCount: 4 }
+];
+
+// Public routes
+router.get('/getAllproducts', getProducts);
+router.get('/:id', getProduct);
+router.get('/products/availability/:productId/:size', checkStockAvailability);
+// Protected routes (require authentication)
 router.use(authenticate);
 
-// Get all products - accessible by all authenticated users
-router.get('/getAllproducts', getProducts);
-
-// Get single product - accessible by all authenticated users
-router.get('/:id', getProduct);
-
 // Admin only routes
-router.post('/addproduct', authorizeAdmin, upload.single('image'), createProduct);
-router.put('/update/:id', authorizeAdmin, upload.single('image'), updateProduct);
-router.delete('/delete/:id', authorizeAdmin, deleteProduct);
+router.post('/addproduct', authorizeAdmin, upload.fields([
+  { name: 'mainImage', maxCount: 1 },
+  { name: 'additionalImages', maxCount: 5 }
+]), createProduct);
+
+router.put('/update/:id', 
+  authorizeAdmin, 
+  upload.fields(uploadFields), 
+  updateProduct
+);
+
+router.delete('/delete/:id', 
+  authorizeAdmin, 
+  deleteProduct
+);
 
 module.exports = router;

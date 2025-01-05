@@ -51,6 +51,12 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-
+.shared-container {
+    padding: 12px 20px;
+    max-width: 1440px;
+    margin: 0 auto;
+    box-sizing: border-box; 
+  }
+  
 
 @import '@angular/material/prebuilt-themes/indigo-pink.css';

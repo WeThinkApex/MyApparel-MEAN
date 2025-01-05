@@ -7,33 +7,42 @@ const productSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: false
+    required: true
   },
   price: {
     type: Number,
     required: [true, 'Product price is required']
   },
-  salePrice: {
+  originalPrice: {
     type: Number,
-    required: false
+    required: [true, 'Original price is required']
   },
   category: {
     type: String,
     required: [true, 'Product category is required'],
-    enum: ['GIRLS FASHION', 'BOYS FASHION', 'FOOTWEAR', 'TOYS', 'DIAPRING', 
-           'FEEDING', 'BATH', 'NURSERY', 'MOMS', 'HEALTH', 'BOUTIQUES']
+    enum: ['GIRLS FASHION', 'BOYS FASHION']
   },
   brand: {
     type: String,
     required: [true, 'Brand is required']
   },
-  imageUrl: {
+  mainImage: {
     type: String,
-    required: [true, 'Product image is required']
+    required: [true, 'Main product image is required']
   },
-  stock: {
-    type: Number,
-    default: 0
+  additionalImages: [{
+    type: String
+  }],
+  sizes: [{
+    name: String,
+    stock: Number
+  }],
+  sizeAndFit: [String],
+  materialCare: [String],
+  productDetails: [String],
+  deliveryInfo: {
+    type: String,
+    default: 'Standard delivery in 4-5 business days'
   },
   isActive: {
     type: Boolean,
@@ -41,6 +50,12 @@ const productSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true
+});
+
+// Middleware to calculate totalStock before saving
+productSchema.pre('save', function(next) {
+  this.totalStock = this.sizes.reduce((total, size) => total + size.stock, 0);
+  next();
 });
 
 module.exports = mongoose.model('Product', productSchema);

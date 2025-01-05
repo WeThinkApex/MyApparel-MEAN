@@ -87,37 +87,61 @@
 }
 
 /* Products Grid */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
 
 .product-card {
   background-color: white;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-image {
-  height: 200px;
+  position: relative;
+  width: 100%;
+  padding-top: 100%; 
   overflow: hidden;
 }
 
 .product-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 
 .product-details {
   padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-details h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
+  line-height: 1.4;
+  max-height: 2.8em; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 2.8em; 
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch; 
 }
 
 .price-info {
@@ -157,4 +181,37 @@
 .delete-btn {
   background-color: #dc3545;
   color: white;
+}
+
+.stock-info {
+  margin: 1rem 0;
+}
+
+.sizes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.sizes-grid span {
+  padding: 0.25rem;
+  text-align: center;
+  background-color: #dc3545;
+  color: white; 
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.sizes-grid span.out-of-stock {
+  background-color: #e9ecef;
+  color: black;
+  opacity: 0.7;
+}
+
+.club-price {
+  color: #28a745;
+  font-size: 0.875rem;
+  display: block;
+  margin-top: 0.25rem;
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AdminPanelSService } from '../adminpanel/adminpanel.service';
+import { environment } from 'environment';
 
 interface ProductImage {
   url: string;
@@ -24,12 +26,11 @@ interface Product {
   images: ProductImage[];
   price: number;
   originalPrice: number;
-  clubPrice: number;
   sizes: Size[];
   sizeAndFit: string[];
   materialCare: string[];
   productDetails: string[];
-  sizeChartImage: string;  // Add this line
+  sizeChartImage: string;
 }
 
 @Component({
@@ -38,7 +39,7 @@ interface Product {
   styleUrls: ['./product-details.component.css']
 })
 export class ProductDetailsComponent implements OnInit {
-  
+
   product: Product | undefined;
   currentImageIndex: number = 0;
   selectedSize: string | null = null;
@@ -56,8 +57,9 @@ export class ProductDetailsComponent implements OnInit {
     materialCare: false,
     productDetails: false
   };
+  private imgURL = `${environment.imgURL}`;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private productService: AdminPanelSService,) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -67,46 +69,25 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   loadProductDetails(productId: string) {
-    // Simulated product data - replace with actual API call
-    this.product = {
-      id: productId,
-      brand: 'PUMA',
-      title: 'Cotton Knit Half Sleeves T-Shirt With Logo Print - Teal Blue',
-      images: [
-        { url: 'assets/premium/premium-1.jpg', alt: 'Front View' },
-        { url: 'assets/premium/premium-2.jpg', alt: 'Back View' },
-        { url: 'assets/premium/premium-1.jpg', alt: 'Side View' },
-        { url: 'assets/premium/premium-2.jpg', alt: 'Detail View' }
-      ],
-      price: 711,
-      originalPrice: 799,
-      clubPrice: 695,
-      sizes: [
-        { name: '2-3Y', stock: 1 },
-        { name: '3-4Y', stock: 3 },
-        { name: '4-5Y', stock: 1 },
-        { name: '5-6Y', stock: 3 },
-        { name: '7-8Y', stock: 5 },
-        { name: '9-10Y', stock: 5 }
-      ],
-      sizeAndFit: [
-        'Regular Fit',
-        'The model (height 6\') is wearing size M'
-      ],
-      materialCare: [
-        '100% Cotton',
-        'Machine wash',
-        'Do not bleach',
-        'Tumble dry low'
-      ],
-      productDetails: [
-        'Round neck',
-        'Short sleeves',
-        'Printed branding',
-        'Cotton knit fabric'
-      ],
-      sizeChartImage: 'assets/images/size-chart.jpg'
-    };
+    this.productService.getProduct(productId).subscribe({
+      next: (product) => {
+        const backendBaseUrl = this.imgURL;
+        const mainImage = product.mainImage
+          ? { url: `${backendBaseUrl}${product.mainImage}`, alt: 'Main View' }
+          : { url: 'path/to/default-image.jpg', alt: 'Default Image' };
+        const additionalImages = product.additionalImages?.map((img: string, index: number) => ({
+          url: `${backendBaseUrl}${img}`,
+          alt: `Additional View ${index + 1}`
+        })) || [];
+        this.product = {
+          ...product,
+          images: [mainImage, ...additionalImages]
+        };
+      },
+      error: (error) => {
+        console.error('Error loading product:', error);
+      }
+    });
   }
 
   setActiveImage(index: number) {
@@ -127,18 +108,8 @@ export class ProductDetailsComponent implements OnInit {
     return Math.round(((originalPrice - price) / originalPrice) * 100);
   }
 
-  calculateClubSavings(): number {
-    if (this.product) {
-      return this.product.price - this.product.clubPrice;
-    }
-    return 0;
-  }
-
-  calculateEarnPoints(): number {
-    if (this.product) {
-      return Math.floor(this.product.clubPrice * 0.05); // 5% points
-    }
-    return 0;
+  isOutOfStock(product: Product): boolean {
+    return !(product.sizes?.some((s) => s.stock > 0));
   }
 
   checkDelivery() {

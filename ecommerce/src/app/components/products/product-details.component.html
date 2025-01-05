@@ -1,10 +1,8 @@
 <!-- Product Navigation Breadcrumb -->
 <nav class="breadcrumb-container">
-  <div class="breadcrumb">
+  <div class="breadcrumb shared-container ">
     <a href="/">Home</a> /
-    <a href="/clothes">Clothes & Shoes</a> /
-    <a href="/athleisure">Athleisure & Sportswear</a> /
-    <span>{{product?.title}}</span>
+    <span>{{product?.title || 'Product Details'}}</span>
   </div>
 </nav>
 
@@ -20,11 +18,11 @@
         <img [src]="image.url" [alt]="image.alt">
       </div>
     </div>
-
+    
     <!-- Main Image Display -->
     <div class="main-image-container">
       <img [src]="product.images[currentImageIndex].url" 
-           [alt]="product.images[currentImageIndex].alt"
+           [alt]="product.images[currentImageIndex].alt" 
            class="main-product-image">
     </div>
   </div>
@@ -44,24 +42,14 @@
       </div>
     </div>
 
-    <!-- Club Price Info -->
-    <!-- <div class="club-price-info">
-      <div class="club-price">Club Price: ₹{{product.clubPrice}}</div>
-      <div class="club-savings">Add. saving of ₹{{calculateClubSavings()}}</div>
-      <div class="earn-points">Earn points ₹{{calculateEarnPoints()}}</div>
-    </div> -->
-
     <!-- Size Selection -->
     <div class="size-section">
       <div class="size-header">
         <h3>Size</h3>
-        <!-- <button class="size-chart-btn" (click)="openSizeChart()">
-          SIZE CHART
-        </button> -->
       </div>
 
       <div class="size-grid">
-        <button *ngFor="let size of product.sizes"
+        <button *ngFor="let size of product.sizes || []"
                 class="size-button"
                 [class.selected]="selectedSize === size.name"
                 [class.out-of-stock]="size.stock === 0"
@@ -87,13 +75,9 @@
 
       <div class="delivery-info" *ngIf="deliveryInfo">
         <div class="delivery-date">
-          Get it by {{deliveryInfo.estimatedDate}}
+          Get it by {{deliveryInfo.estimatedDate || 'Unavailable'}}
         </div>
         <div class="delivery-features">
-          <!-- <div class="feature">
-            <img src="assets/icons/gift.svg" alt="Gift">
-            Gift Wrap
-          </div> -->
           <div class="feature">
             <img src="assets/products/wallet.svg" alt="COD">
             COD Available
@@ -108,7 +92,7 @@
 
     <!-- Add to Cart Button -->
     <button class="add-to-cart-btn"
-            [disabled]="!selectedSize || !inStock"
+            [disabled]="!selectedSize || isOutOfStock(product)"
             (click)="addToCart()">
       ADD TO CART
     </button>
@@ -134,7 +118,7 @@
         
         <div class="panel-content">
           <ul class="details-list">
-            <li *ngFor="let fit of product?.sizeAndFit">
+            <li *ngFor="let fit of product?.sizeAndFit || ['Not available']">
               <mat-icon class="check-icon">check_circle</mat-icon>
               {{ fit }}
             </li>
@@ -155,7 +139,7 @@
     
         <div class="panel-content">
           <ul class="details-list">
-            <li *ngFor="let care of product?.materialCare">
+            <li *ngFor="let care of product?.materialCare || ['Not available']">
               <mat-icon class="check-icon">check_circle</mat-icon>
               {{ care }}
             </li>
@@ -176,7 +160,7 @@
     
         <div class="panel-content">
           <ul class="details-list">
-            <li *ngFor="let detail of product?.productDetails">
+            <li *ngFor="let detail of product?.productDetails || ['Not available']">
               <mat-icon class="check-icon">check_circle</mat-icon>
               {{ detail }}
             </li>
@@ -187,25 +171,7 @@
   </div>
 </div>
 
-<!-- Size Chart Modal -->
-
-<!-- <div class="size-chart-modal" *ngIf="showSizeChart && product">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Size Chart</h2>
-      <button class="close-btn" (click)="closeSizeChart()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <img [src]="product.sizeChartImage" alt="Size Chart">
-      <div class="size-guide">
-        <h3>How to Measure</h3>
-        <div class="measurement-guide">
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-<!-- Out of Stock Notification Modal -->
+<!-- Notify Me Modal -->
 <div class="notification-modal" *ngIf="showNotifyModal">
   <div class="modal-content">
     <div class="modal-header">

@@ -29,25 +29,37 @@
                   Add New Product
               </button>
           </div>
-
-          <div class="products-grid">
-              <div class="product-card" *ngFor="let product of products">
-                  <div class="product-image">
-                      <img [src]="product.imageUrl" [alt]="product.title">
-                  </div>
-                  <div class="product-details">
-                      <h3>{{product.title}}</h3>
-                      <div class="price-info">
-                          <span class="original-price">${{product.originalPrice}}</span>
-                          <span class="current-price">${{product.price}}</span>
-                      </div>
-                      <div class="product-actions">
-                          <button class="edit-btn" (click)="editProduct(product)">Edit</button>
-                          <button class="delete-btn" (click)="deleteProduct(product._id)">Delete</button>
-                      </div>
-                  </div>
-              </div>
+          
+<div class="products-grid">
+    <div class="product-card" *ngFor="let product of products">
+      <div class="product-image">
+        <img [src]="product.mainImage" 
+             [alt]="product.title"
+             (error)="handleImageError($event)"> 
+      </div>
+      <div class="product-details">
+        <h3 [title]="product.title">{{product.title}}</h3>
+        <div class="price-info">
+          <span class="original-price">₹{{product.originalPrice}}</span>
+          <span class="current-price">₹{{product.price}}</span>
+        </div>
+        <div class="stock-info">
+          <p>Available Sizes:</p>
+          <div class="sizes-grid">
+            <span *ngFor="let size of product.sizes" 
+                  [class.out-of-stock]="size.stock === 0">
+              {{size.name}} ({{size.stock}})
+            </span>
           </div>
+          <p>Total Stock: {{product.totalStock}}</p>
+        </div>
+        <div class="product-actions">
+          <button class="edit-btn" (click)="editProduct(product)">Edit</button>
+          <button class="delete-btn" (click)="deleteProduct(product._id)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
       </main>
   </div>
 </div>

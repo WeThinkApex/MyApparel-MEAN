@@ -42,6 +42,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
     MatDialogModule,
    
   ],
+  exports: [HeaderComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

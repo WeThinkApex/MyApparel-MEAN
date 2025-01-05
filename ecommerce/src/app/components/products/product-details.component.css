@@ -2,6 +2,7 @@
 .breadcrumb-container {
   padding: 16px 24px;
   background: #fff;
+  margin-top: 100px;
 }
 
 .breadcrumb {
@@ -394,7 +395,7 @@
 .check-icon {
   color: #4CAF50;
   font-size: 20px;
-  width: 20px;
+  width: 100px;
   height: 20px;
   margin-right: 8px;
 }
