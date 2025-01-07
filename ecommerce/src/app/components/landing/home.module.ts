@@ -19,6 +19,7 @@ import { RegisterComponent } from '../authentication/register/register.component
 import { AccountDialogComponent } from './account-dialog/account-dialog.component';
 import { AppComponent } from '../../app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { NewarrivalsComponent } from './newarrivals/newarrivals/newarrivals.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -26,7 +27,8 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
     CarouselComponent,
     PremiumBoutiquesComponent,
     AccountDialogComponent,
-    NavMenuComponent
+    NavMenuComponent,
+    NewarrivalsComponent
   ],
   imports: [
     RouterModule,

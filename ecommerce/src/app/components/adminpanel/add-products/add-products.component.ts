@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminPanelSService } from '../adminpanel.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { environment } from 'environment';
 
 interface Size {
   name: string;
@@ -25,8 +26,8 @@ export class AddProductDialogComponent implements OnInit {
     { value: 'GIRLS FASHION', label: 'Girls Fashion' },
     { value: 'BOYS FASHION', label: 'Boys Fashion' },
   ];
+  removedImageUrls: string[] = [];
   availableSizes = ['2Y', '3Y', '4Y', '5Y', '6Y', '7Y', '8Y', '9Y', '10Y'];
-
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddProductDialogComponent>,
@@ -109,7 +110,10 @@ export class AddProductDialogComponent implements OnInit {
   removeArrayItem(array: FormArray, index: number) {
     array.removeAt(index);
   }
-
+  private cleanImageUrl(url: string): string {
+    const match = url.match(/\/uploads\/products\/.*$/);
+    return match ? match[0] : url;
+  }
   private patchFormWithExistingProduct(product: any): void {
     // Basic form fields
     this.productForm.patchValue({
@@ -127,13 +131,14 @@ export class AddProductDialogComponent implements OnInit {
       this.mainImagePreview = product.mainImage;
       console.log("inside ", this.mainImagePreview )
     }
-
     // Handle additional images
     if (product.additionalImages && product.additionalImages.length > 0) {
-      this.additionalImages = product.additionalImages.map((img: string) => ({
+      this.additionalImages = product.additionalImages?.map((img: string, index: number) => ({
         file: null,
-        preview: img
-      }));
+        preview: img,
+        isExisting: true
+  
+      })) || [];
     }
     // Clear and patch size array
     this.sizesFormArray.clear();
@@ -205,58 +210,69 @@ export class AddProductDialogComponent implements OnInit {
   }
 
   removeAdditionalImage(index: number) {
+    const removedImage = this.additionalImages[index];
+    if (!removedImage.file && removedImage.preview.includes('/uploads/')) {
+      this.removedImageUrls.push(removedImage.preview);
+    }
     this.additionalImages.splice(index, 1);
   }
 
-onSubmit() {
-  if (this.productForm.valid) {
-    this.isSubmitting = true;
-    const formData = new FormData();
-    Object.keys(this.productForm.value).forEach(key => {
-      if (key !== 'sizes' && key !== 'sizeAndFit' && 
-          key !== 'materialCare' && key !== 'productDetails') {
-        formData.append(key, this.productForm.get(key)?.value);
+  onSubmit() {
+    if (this.productForm.valid) {
+      this.isSubmitting = true;
+      const formData = new FormData();
+      Object.keys(this.productForm.value).forEach(key => {
+        if (key !== 'sizes' && key !== 'sizeAndFit' && 
+            key !== 'materialCare' && key !== 'productDetails') {
+          formData.append(key, this.productForm.get(key)?.value);
+        }
+      });
+      formData.append('sizes', JSON.stringify(this.sizesFormArray.value));
+      formData.append('sizeAndFit', JSON.stringify(this.sizeAndFitFormArray.value));
+      formData.append('materialCare', JSON.stringify(this.materialCareFormArray.value));
+      formData.append('productDetails', JSON.stringify(this.productDetailsFormArray.value));
+      if (this.selectedMainImage) {
+        formData.append('mainImage', this.selectedMainImage);
       }
-    });
-    formData.append('sizes', JSON.stringify(this.sizesFormArray.value));
-    formData.append('sizeAndFit', JSON.stringify(this.sizeAndFitFormArray.value));
-    formData.append('materialCare', JSON.stringify(this.materialCareFormArray.value));
-    formData.append('productDetails', JSON.stringify(this.productDetailsFormArray.value));
-    // Handle main image
-    if (this.selectedMainImage) {
-      formData.append('mainImage', this.selectedMainImage);
+      
+      const existingImages = this.additionalImages
+      .filter((img:any) => img.isExisting)
+      .map(img => this.cleanImageUrl(img.preview));
+    this.additionalImages
+      .filter(img => img.file)
+      .forEach((img) => {
+        formData.append('additionalImages', img.file);
+      });
+      const remainingImageUrls = this.additionalImages
+        .filter(img => !img.file)
+        .map(img => img.preview);
+      formData.append('remainingImages', JSON.stringify(remainingImageUrls));
+      formData.append('existingImages', JSON.stringify(existingImages));
+      const cleanedRemovedUrls = this.removedImageUrls.map(url => this.cleanImageUrl(url));
+    formData.append('removedImages', JSON.stringify(cleanedRemovedUrls));
+      const request = this.data?.product?._id
+        ? this.productService.updateProduct(this.data.product._id, formData)
+        : this.productService.createProduct(formData);
+
+      request.subscribe({
+        next: (response) => {
+          const successMessage = this.data?.mode === 'edit'
+            ? 'Product updated successfully'
+            : 'Product added successfully';
+          this.snackBar.successSnackBar(successMessage);
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          console.error('Error saving product:', error);
+          this.isSubmitting = false;
+          this.snackBar.errorSnackBar('Error saving product: ' + error.message);
+        }
+      });
+    } else {
+      this.snackBar.errorSnackBar('Please fill all required fields');
+      this.markFormGroupTouched(this.productForm);
     }
-
-    // Handle additional images
-    this.additionalImages.forEach((img, index) => {
-      if (img.file) {
-        formData.append(`additionalImages`, img.file);
-      }
-    });
-
-    const request = this.data?.product?._id
-      ? this.productService.updateProduct(this.data.product._id, formData)
-      : this.productService.createProduct(formData);
-
-    request.subscribe({
-      next: (response) => {
-        const successMessage = this.data?.mode === 'edit'
-          ? 'Product updated successfully'
-          : 'Product added successfully';
-        this.snackBar.successSnackBar(successMessage);
-        this.dialogRef.close(true);
-      },
-      error: (error) => {
-        console.error('Error saving product:', error);
-        this.isSubmitting = false;
-        this.snackBar.errorSnackBar('Error saving product: ' + error.message);
-      }
-    });
-  } else {
-    this.snackBar.errorSnackBar('Please fill all required fields');
-    this.markFormGroupTouched(this.productForm);
   }
-}
   private markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();

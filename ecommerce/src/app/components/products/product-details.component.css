@@ -61,9 +61,15 @@
   object-fit: cover;
 }
 
+.thumbnail:hover img {
+  transform: scale(1.2);
+}
+
+
+/* Main Image Container with Zoom Effect */
 .main-image-container {
+  position: relative;
   flex: 1;
-  position: sticky;
   top: 20px;
 }
 
@@ -71,13 +77,39 @@
   width: 100%;
   height: auto;
   border-radius: 8px;
+  cursor: zoom-in;
 }
 
+.main-image-container:hover .main-product-image {
+  transform: scale(1.5);
+  transform-origin: center center;
+}
+.zoom-container {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  z-index: 1;
+}
+
+.zoom-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 /* Product Info */
 .product-info {
   padding: 0 20px;
+  transition: opacity 0.3s;
 }
 
+.product-info.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 .brand-name {
   font-size: 24px;
   font-weight: 500;
@@ -403,13 +435,13 @@
 /* Content Styling */
 .panel-content {
   padding: 16px 8px;
-}
-
+  }
+  
 .details-list {
   list-style: none;
   padding: 0;
   margin: 0;
-}
+  }
 
 .details-list li {
   display: flex;
@@ -427,8 +459,8 @@ mat-expansion-panel:hover {
 /* Animation */
 mat-expansion-panel {
   transition: all 0.3s ease;
-}
-
+  }
+  
 /* Custom panel styles */
 ::ng-deep .mat-expansion-panel {
   margin-bottom: 8px !important;
@@ -438,11 +470,11 @@ mat-expansion-panel {
 
 ::ng-deep .mat-expansion-panel-header {
   padding: 20px 24px;
-}
-
+  }
+  
 ::ng-deep .mat-expansion-panel-header-title {
   color: #333333;
-}
+  }
 
 ::ng-deep .mat-expansion-indicator::after {
   color: #757575;

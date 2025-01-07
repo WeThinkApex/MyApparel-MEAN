@@ -63,7 +63,7 @@ export class AdminDashboardComponent implements OnInit {
             // Handle mainImage
             mainImage: product.mainImage ?
               `${backendBaseUrl}${product.mainImage}` :
-              'path/to/default-image.jpg',
+              'assets/no-image-available.jpg',
             // Handle additionalImages array properly
             additionalImages: Array.isArray(product.additionalImages) ?
               product.additionalImages.map((imgPath: string) =>
@@ -91,23 +91,21 @@ export class AdminDashboardComponent implements OnInit {
 
   openAddProductDialog() {
     const dialogRef = this.dialog.open(AddProductDialogComponent, {
-      width: '400px',
-      height: '800px',
-      position: { right: '0' },
-      panelClass: 'right-sidebar-dialog',
+      width: '800px',  
+      maxHeight: '90vh', 
+      position: { top: '50px' }, 
+      panelClass: 'centered-dialog',
       autoFocus: false,
       hasBackdrop: true,
-
       data: { mode: 'add' }
     });
-
+  
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadProducts();
       }
     });
   }
-
   editProduct(product: Product) {
     const dialogRef = this.dialog.open(AddProductDialogComponent, {
       width: '400px',

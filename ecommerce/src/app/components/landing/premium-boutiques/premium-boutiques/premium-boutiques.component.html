@@ -1,44 +1,59 @@
 <section class="premium-boutiques">
   <div class="container">
     <h2 class="section-title">New Arrivals</h2>
-
+    
     <div class="boutiques-grid">
-      <div *ngFor="let product of products" class="boutique-card" (click)="navigateToProduct(product)">
-        <div class="image-container">
-          <img [src]="product.mainImage" [alt]="product.title" (error)="handleImageError($event)" class="card-image">
-          
-        </div>
-        <div class="card-content">
-          <div class="brand-name">{{ product.brand }}</div>
-          <h3 class="card-title">{{ product.title }}</h3>
-          <div class="price-container">
-            <span class="card-description-price">₹{{ product.price }}</span>
-            <span class="card-description-original-price">₹{{ product.originalPrice }}</span>
-            <span class="card-description-discount">({{ calculateDiscount(product) }}% OFF)</span>
-          
+      <div *ngFor="let product of products" class="boutique-card">
+        <!-- Product Link Wrapper -->
+        <div class="product-link" (click)="navigateToProduct(product)">
+          <!-- Image Container -->
+          <div class="image-container">
+            <img [src]="product.mainImage" 
+                 [alt]="product.title" 
+                 (error)="handleImageError($event)" 
+                 class="card-image">
           </div>
-          <div class="card-description">Get it {{ product.deliveryInfo }} 
+
+          <!-- Product Details -->
+          <div class="card-content">
+            <div class="product-title-block">
+              <span class="brand-name">{{ product.brand }}</span>
+              <span class="product-title">{{ product.title }}</span>
+            </div>
             
-            <div class="image-overlay">
-              <div class="hover-content">
-                <div class="size-list">
-                  <span class="size-item" *ngFor="let size of getLimitedSizes(product.sizes, 4)" [class.out-of-stock]="size.stock === 0"
-                    [title]="size.stock === 0 ? 'Out of Stock' : size.stock + ' items left'">
-                    {{ size.name }}
-                    <small *ngIf="size.stock > 0" class="stock-info">({{ size.stock }})</small>
-                  </span>
-                  <span *ngIf="product.sizes.length > 4" class="size-item more-btn">
-                    +{{ product.sizes.length - 4 }} more
-                  </span>
-                </div>
-                  <button 
-                    class="add-to-cart-btn" 
-                    (click)="addToCart(product, $event)" 
-                    [disabled]="isOutOfStock(product)">
-                    {{ getButtonText(product) }}
-                  </button>
+            <div class="price-details">
+              <div class="price-container">
+                <span class="current-price">₹{{ product.price }}</span>
+                <span class="original-price">₹{{ product.originalPrice }}</span>
+                <span class="discount">({{ calculateDiscount(product) }}% OFF)</span>
               </div>
-          </div></div>
+              <div class="delivery-info">
+                Get it {{ product.deliveryInfo }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hover Content -->
+        <div class="hover-content">
+          <div class="size-list">
+            <span class="size-item" 
+                  *ngFor="let size of getLimitedSizes(product.sizes, 4)" 
+                  [class.out-of-stock]="size.stock === 0"
+                  [title]="size.stock === 0 ? 'Out of Stock' : size.stock + ' items left'">
+              {{ size.name }}
+              <small *ngIf="size.stock > 0" class="stock-info">({{ size.stock }})</small>
+            </span>
+            <span *ngIf="product.sizes.length > 4" class="more-sizes">
+              +{{ product.sizes.length - 4 }} more
+            </span>
+          </div>
+
+          <button class="add-to-cart-btn" 
+                  (click)="addToCart(product, $event)"
+                  [disabled]="isOutOfStock(product)">
+            {{ getButtonText(product) }}
+          </button>
         </div>
       </div>
     </div>

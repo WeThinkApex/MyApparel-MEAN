@@ -129,7 +129,11 @@ exports.getProduct = async (req, res) => {
   }
 };
 
-// Update product
+
+const cleanImagePath = (imagePath) => {
+  const match = imagePath.match(/\/uploads\/products\/.*$/);
+  return match ? match[0] : imagePath;
+};
 exports.updateProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -137,56 +141,54 @@ exports.updateProduct = async (req, res) => {
       return res.status(404).json({ message: 'Product not found' });
     }
     // Handle image updates
-    if (req.files?.length > 0) {
-      const mainImage = req.files.find(file => file.fieldname === 'mainImage');
-      const additionalImages = req.files.filter(file => file.fieldname === 'additionalImages');
-
-      if (mainImage) {
+    if (req.files || req.body.removedImages) {
+     
+      if (req.files?.mainImage) {
         if (product.mainImage) {
-          const oldMainImagePath = path.join(__dirname, '..', 'public', product.mainImage);
+          const oldMainImagePath = path.join(__dirname, '..', 'public', cleanImagePath(product.mainImage));
           await fs.unlink(oldMainImagePath).catch(console.error);
         }
-        product.mainImage = `/uploads/products/${mainImage.filename}`;
+        product.mainImage = `/uploads/products/${req.files.mainImage[0].filename}`;
       }
-
-      if (additionalImages.length > 0) {
-        // Delete old additional images
-        for (const image of product.images) {
-          const oldImagePath = path.join(__dirname, '..', 'public', image.url);
-          await fs.unlink(oldImagePath).catch(console.error);
-        }
-        product.images = additionalImages.map(file => ({
-          url: `/uploads/products/${file.filename}`,
-          alt: product.title
-        }));
+      const existingImages = JSON.parse(req.body.existingImages || '[]')
+      .map(cleanImagePath);
+    const removedImages = JSON.parse(req.body.removedImages || '[]')
+      .map(cleanImagePath);
+      for (const imageUrl of removedImages) {
+        const imagePath = path.join(__dirname, '..', 'public', cleanImagePath(imageUrl));
+        await fs.unlink(imagePath).catch(console.error);
       }
+      let updatedAdditionalImages = [...existingImages];
+      if (req.files?.additionalImages) {
+        const newImages = req.files.additionalImages.map(file => 
+          `/uploads/products/${file.filename}`
+        );
+        updatedAdditionalImages = [...updatedAdditionalImages, ...newImages];
+      }
+      product.additionalImages = updatedAdditionalImages
+        .filter(img => !removedImages.includes(cleanImagePath(img)))
+        .map(cleanImagePath);
     }
-    // Update other fields
     const updateFields = [
       'title', 'description', 'price', 'originalPrice', 'clubPrice',
-      'category', 'brand', 'sizeAndFit', 'materialCare', 'productDetails',
-      'deliveryInfo'
+      'category', 'brand', 'deliveryInfo', 'isActive'
     ];
 
     updateFields.forEach(field => {
       if (req.body[field] !== undefined) {
-        if (['sizeAndFit', 'materialCare', 'productDetails'].includes(field)) {
-          product[field] = JSON.parse(req.body[field]);
-        } else {
-          product[field] = req.body[field];
-        }
+        product[field] = req.body[field];
       }
     });
-    // Update sizes if provided
-    if (req.body.sizes) {
-      product.sizes = JSON.parse(req.body.sizes);
-    }
+    if (req.body.sizes) product.sizes = JSON.parse(req.body.sizes);
+    if (req.body.sizeAndFit) product.sizeAndFit = JSON.parse(req.body.sizeAndFit);
+    if (req.body.materialCare) product.materialCare = JSON.parse(req.body.materialCare);
+    if (req.body.productDetails) product.productDetails = JSON.parse(req.body.productDetails);
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);
   } catch (error) {
     if (req.files) {
-      req.files.forEach(file => {
+      Object.values(req.files).flat().forEach(file => {
         fs.unlink(file.path).catch(console.error);
       });
     }

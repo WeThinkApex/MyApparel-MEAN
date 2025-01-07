@@ -23,12 +23,18 @@
     <div class="main-image-container">
       <img [src]="product.images[currentImageIndex].url" 
            [alt]="product.images[currentImageIndex].alt" 
-           class="main-product-image">
+           class="main-product-image"
+           (mousemove)="onMouseMove($event)"
+           (mouseenter)="onMouseEnter()"
+           (mouseleave)="onMouseLeave()">
+           <div class="zoom-container" *ngIf="showZoom && product" (mousemove)="onMouseMove($event)">
+            <img [src]="product.images[currentImageIndex].url" class="zoom-image" [ngStyle]="zoomImageStyle">
+          </div>
     </div>
   </div>
 
   <!-- Right Side - Product Information -->
-  <div class="product-info">
+  <div class="product-info" [class.hidden]="showZoom">
     <!-- Basic Info -->
     <div class="brand-name">{{product.brand}}</div>
     <h1 class="product-title">{{product.title}}</h1>
@@ -169,7 +175,11 @@
       </mat-expansion-panel>
     </mat-accordion>
   </div>
+  
 </div>
+<!-- <div class="zoom-container" *ngIf="showZoom && product" (mousemove)="onMouseMove($event)">
+  <img [src]="product.images[currentImageIndex].url" class="zoom-image" [ngStyle]="zoomImageStyle">
+</div> -->
 
 <!-- Notify Me Modal -->
 <div class="notification-modal" *ngIf="showNotifyModal">

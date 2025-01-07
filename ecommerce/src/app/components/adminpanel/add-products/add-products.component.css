@@ -1,7 +1,6 @@
 .dialog-container {
     padding: 24px;
     width: 100%;
-    max-width: 600px;
   }
   
   .dialog-header {
@@ -224,4 +223,67 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
   margin-bottom: 16px;
+}
+
+.dialog-container {
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  background: white;
+  padding: 16px 24px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.dialog-content {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.form-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.form-actions {
+  background: white;
+  padding: 16px 24px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.upload-section {
+  margin-bottom: 24px;
+}
+
+/* Make scrolling smooth */
+.dialog-content {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dialog-container {
+    max-height: 100vh;
+  }
+  
+  .form-section {
+    padding: 16px;
+  }
 }

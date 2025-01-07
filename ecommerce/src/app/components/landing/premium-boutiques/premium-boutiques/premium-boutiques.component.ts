@@ -46,7 +46,7 @@ export class PremiumBoutiquesComponent {
             // Handle both mainImage and additional images
             mainImage: product.mainImage ?
               `${backendBaseUrl}${product.mainImage}` :
-              'path/to/default-image.jpg',
+              'assets/no-image-available.jpg',
             images: product.additionalImages?.map((img: any) => ({
               ...img,
               url: `${backendBaseUrl}${img.url}`

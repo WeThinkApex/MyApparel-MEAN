@@ -51,7 +51,9 @@ export class ProductDetailsComponent implements OnInit {
   notificationEmail: string = '';
   notificationPhone: string = '';
   inStock: boolean = true;
-
+  showZoom = false;
+  zoomStyle: { [key: string]: string } = {};
+  zoomImageStyle: { [key: string]: string } = {};
   expandedSections = {
     sizeAndFit: false,
     materialCare: false,
@@ -67,14 +69,37 @@ export class ProductDetailsComponent implements OnInit {
       this.loadProductDetails(productId);
     });
   }
-
+  
+  
+  onMouseMove(event: MouseEvent) {
+    if (!this.showZoom) return;
+  
+    const containerRect = (event.target as HTMLElement).getBoundingClientRect();
+    const x = event.clientX - containerRect.left;
+    const y = event.clientY - containerRect.top;
+    
+    const zoomX = (x / containerRect.width) * 100;
+    const zoomY = (y / containerRect.height) * 100;
+  
+    this.zoomImageStyle = {
+      transform: `translate(-${zoomX}%, -${zoomY}%) scale(2)`
+    };
+  }
+  
+  onMouseEnter() {
+    this.showZoom = true;
+  }
+  
+  onMouseLeave() {
+    this.showZoom = false;
+  }
   loadProductDetails(productId: string) {
     this.productService.getProduct(productId).subscribe({
       next: (product) => {
         const backendBaseUrl = this.imgURL;
         const mainImage = product.mainImage
           ? { url: `${backendBaseUrl}${product.mainImage}`, alt: 'Main View' }
-          : { url: 'path/to/default-image.jpg', alt: 'Default Image' };
+          : { url: 'assets/no-image-available.jpg', alt: 'Default Image' };
         const additionalImages = product.additionalImages?.map((img: string, index: number) => ({
           url: `${backendBaseUrl}${img}`,
           alt: `Additional View ${index + 1}`
@@ -83,6 +108,7 @@ export class ProductDetailsComponent implements OnInit {
           ...product,
           images: [mainImage, ...additionalImages]
         };
+        console.log("additional images",this.product)
       },
       error: (error) => {
         console.error('Error loading product:', error);
