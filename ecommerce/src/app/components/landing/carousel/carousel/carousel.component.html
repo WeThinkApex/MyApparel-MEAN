@@ -1,0 +1,34 @@
+<!-- carousel.component.html -->
+<div class="page-container home-carousel">
+  <div class="carousel-outer-container">
+    <ngb-carousel 
+      #carousel
+      [interval]="3000"
+      [pauseOnHover]="true"
+      [wrap]="true"
+      [showNavigationIndicators]="false"
+      (slide)="onSlideChange($event)">
+      
+      <ng-template ngbSlide *ngFor="let image of images; let i = index">
+        <div class="carousel-slide-container">
+          <a [routerLink]="image.link" class="slide-link">
+            <img 
+              [src]="image.url" 
+              [alt]="image.alt"
+              class="carousel-image"
+              [ngClass]="{'cursor-pointer': image.link}"
+              loading="lazy">
+          </a>
+        </div>
+      </ng-template>
+    </ngb-carousel>
+
+    <!-- Custom Navigation Arrows -->
+    <button class="carousel-arrow prev" (click)="carousel.prev()">
+      <span class="arrow-icon">‹</span>
+    </button>
+    <button class="carousel-arrow next" (click)="carousel.next()">
+      <span class="arrow-icon">›</span>
+    </button>
+  </div>
+</div>

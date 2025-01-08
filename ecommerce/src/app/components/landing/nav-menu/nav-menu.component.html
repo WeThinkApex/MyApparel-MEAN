@@ -1,0 +1,14 @@
+
+<nav class="main-nav">
+    <div class="nav-container">
+      <ul class="nav-list">
+        <li *ngFor="let category of categories">
+          <a [routerLink]="[category.path]" 
+             [routerLinkActive]="'active'"
+             class="nav-link">
+            {{category.name}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>

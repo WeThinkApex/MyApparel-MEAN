@@ -1,0 +1,207 @@
+<!-- Product Navigation Breadcrumb -->
+<nav class="breadcrumb-container">
+  <div class="breadcrumb shared-container ">
+    <a href="/">Home</a> /
+    <span>{{product?.title || 'Product Details'}}</span>
+  </div>
+</nav>
+
+<div class="product-details-container" *ngIf="product">
+  <!-- Left Side - Product Images -->
+  <div class="product-gallery">
+    <!-- Image Thumbnails -->
+    <div class="thumbnail-list">
+      <div class="thumbnail" 
+           *ngFor="let image of product.images; let i = index"
+           [class.active]="currentImageIndex === i"
+           (click)="setActiveImage(i)">
+        <img [src]="image.url" [alt]="image.alt">
+      </div>
+    </div>
+    
+    <!-- Main Image Display -->
+    <div class="main-image-container">
+      <img [src]="product.images[currentImageIndex].url" 
+           [alt]="product.images[currentImageIndex].alt" 
+           class="main-product-image"
+           (mousemove)="onMouseMove($event)"
+           (mouseenter)="onMouseEnter()"
+           (mouseleave)="onMouseLeave()">
+           <div class="zoom-container" *ngIf="showZoom && product" (mousemove)="onMouseMove($event)">
+            <img [src]="product.images[currentImageIndex].url" class="zoom-image" [ngStyle]="zoomImageStyle">
+          </div>
+    </div>
+  </div>
+
+  <!-- Right Side - Product Information -->
+  <div class="product-info" [class.hidden]="showZoom">
+    <!-- Basic Info -->
+    <div class="brand-name">{{product.brand}}</div>
+    <h1 class="product-title">{{product.title}}</h1>
+
+    <!-- Pricing -->
+    <div class="price-block">
+      <div class="current-price">₹{{product.price}}</div>
+      <div class="original-price">MRP: ₹{{product.originalPrice}}</div>
+      <div class="discount">
+        {{calculateDiscount(product.price, product.originalPrice)}}% OFF
+      </div>
+    </div>
+
+    <!-- Size Selection -->
+<div class="size-section">
+  <div class="size-header">
+    <h3>Size</h3>
+  </div>
+
+  <div class="size-grid">
+    <button *ngFor="let size of product.sizes"
+            class="size-button"
+            [class.selected]="selectedSize === size.name"
+            [class.disabled]="size.stock === 0"
+            [disabled]="size.stock === 0"
+            (click)="selectSize(size)">
+      <span class="size-name">{{size.name}}</span>
+      <span class="stock-left" *ngIf="shouldShowStock(size)">
+        {{size.stock}} left
+      </span>
+    </button>
+  </div>
+</div>
+
+    <!-- Delivery Section -->
+    <div class="delivery-section">
+      <h3>Delivery To</h3>
+      <div class="pincode-checker">
+        <input type="text" 
+               [(ngModel)]="pincode" 
+               placeholder="Enter Pincode"
+               maxlength="6"
+               pattern="[0-9]*">
+        <button (click)="checkDelivery()">APPLY</button>
+      </div>
+
+      <div class="delivery-info" *ngIf="deliveryInfo">
+        <div class="delivery-date">
+          Get it by {{deliveryInfo.estimatedDate || 'Unavailable'}}
+        </div>
+        <div class="delivery-features">
+          <div class="feature">
+            <img src="assets/products/wallet.svg" alt="COD">
+            COD Available
+          </div>
+          <div class="feature">
+            <img src="assets/products/replacement-time.svg" alt="Return">
+            30 days Return/Exchange
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add to Cart Button -->
+    <button class="add-to-cart-btn"
+            [disabled]="!selectedSize || isOutOfStock(product)"
+            (click)="addToCart()">
+      ADD TO CART
+    </button>
+
+    <!-- Wishlist Button -->
+    <button class="wishlist-btn" (click)="toggleWishlist()">
+      <i [class]="isInWishlist ? 'fas fa-heart' : 'far fa-heart'"></i>
+      {{isInWishlist ? 'WISHLISTED' : 'WISHLIST'}}
+    </button>
+
+    <!-- Product Details Accordion -->
+    <mat-accordion class="product-details-accordion">
+      <!-- Size & Fit Panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="panel-title-content">
+              <mat-icon class="icon-size">straighten</mat-icon>
+              Size & Fit
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        
+        <div class="panel-content">
+          <ul class="details-list">
+            <li *ngFor="let fit of product?.sizeAndFit || ['Not available']">
+              <mat-icon class="check-icon">check_circle</mat-icon>
+              {{ fit }}
+            </li>
+          </ul>
+        </div>
+      </mat-expansion-panel>
+    
+      <!-- Material & Care Panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="panel-title-content">
+              <mat-icon class="icon-material">local_laundry_service</mat-icon>
+              Material & Care
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+    
+        <div class="panel-content">
+          <ul class="details-list">
+            <li *ngFor="let care of product?.materialCare || ['Not available']">
+              <mat-icon class="check-icon">check_circle</mat-icon>
+              {{ care }}
+            </li>
+          </ul>
+        </div>
+      </mat-expansion-panel>
+    
+      <!-- Product Details Panel -->
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <div class="panel-title-content">
+              <mat-icon class="icon-details">info</mat-icon>
+              Product Details
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+    
+        <div class="panel-content">
+          <ul class="details-list">
+            <li *ngFor="let detail of product?.productDetails || ['Not available']">
+              <mat-icon class="check-icon">check_circle</mat-icon>
+              {{ detail }}
+            </li>
+          </ul>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  
+</div>
+<!-- <div class="zoom-container" *ngIf="showZoom && product" (mousemove)="onMouseMove($event)">
+  <img [src]="product.images[currentImageIndex].url" class="zoom-image" [ngStyle]="zoomImageStyle">
+</div> -->
+
+<!-- Notify Me Modal -->
+<div class="notification-modal" *ngIf="showNotifyModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Notify Me When Available</h2>
+      <button class="close-btn" (click)="closeNotifyModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form (ngSubmit)="submitNotification()">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="notificationEmail" name="email" required>
+        </div>
+        <div class="form-group">
+          <label>Phone (Optional)</label>
+          <input type="tel" [(ngModel)]="notificationPhone" name="phone">
+        </div>
+        <button type="submit" class="notify-btn">NOTIFY ME</button>
+      </form>
+    </div>
+  </div>
+</div>

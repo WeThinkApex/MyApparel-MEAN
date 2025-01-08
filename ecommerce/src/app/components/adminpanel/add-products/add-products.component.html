@@ -1,0 +1,177 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2>{{ data?.mode === 'edit' ? 'Edit Product' : 'Add New Product' }}</h2>
+    <button class="close-button" mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <!-- Main Image Upload -->
+    <div class="upload-section">
+      <h3>Main Product Image *</h3>
+      <div class="upload-area" (click)="mainImageInput.click()">
+        <div class="upload-content" *ngIf="!mainImagePreview">
+          <mat-icon class="upload-icon">cloud_upload</mat-icon>
+          <p>Click to upload main product image</p>
+        </div>
+        <img [src]="mainImagePreview" class="image-preview">
+      </div>
+      <input #mainImageInput type="file" (change)="onMainImageSelected($event)" accept="image/*" style="display: none">
+    </div>
+
+    <!-- Additional Images -->
+    <div class="upload-section">
+      <h3>Additional Images</h3>
+      <div class="additional-images-grid">
+        <div *ngFor="let img of additionalImages; let i = index" class="additional-image">
+          <img [src]="img.preview" alt="Additional image">
+          <button mat-icon-button color="warn" (click)="removeAdditionalImage(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <div class="upload-area small" (click)="additionalImagesInput.click()">
+          <mat-icon>add_photo_alternate</mat-icon>
+        </div>
+      </div>
+      <input #additionalImagesInput type="file" (change)="onAdditionalImagesSelected($event)" accept="image/*" multiple
+        style="display: none">
+    </div>
+
+    <!-- Basic Info -->
+    <div class="form-section">
+      <h3>Basic Information</h3>
+
+      <div class="form-field">
+        <label>Title *</label>
+        <input matInput formControlName="title" placeholder="Enter product title">
+        <mat-error *ngIf="productForm.get('title')?.errors?.['required']">
+          Title is required
+        </mat-error>
+      </div>
+
+      <div class="form-field">
+        <label>Description *</label>
+        <textarea matInput formControlName="description" rows="4"></textarea>
+        <mat-error *ngIf="productForm.get('description')?.errors?.['required']">
+          Description is required
+        </mat-error>
+      </div>
+
+      <!-- Price Information -->
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Price *</label>
+          <input matInput type="number" formControlName="price">
+          <mat-error *ngIf="productForm.get('price')?.errors?.['required']">
+            Price is required
+          </mat-error>
+        </div>
+
+        <div class="form-field">
+          <label>Original Price *</label>
+          <input matInput type="number" formControlName="originalPrice">
+          <mat-error *ngIf="productForm.get('originalPrice')?.errors?.['required']">
+            Original price is required
+          </mat-error>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Category *</label>
+          <mat-select formControlName="category">
+            <mat-option *ngFor="let category of categories" [value]="category.value">
+              {{category.label}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="productForm.get('category')?.errors?.['required']">
+            Category is required
+          </mat-error>
+        </div>
+        <div class="form-field">
+          <label>Brand *</label>
+          <input matInput formControlName="brand">
+          <mat-error *ngIf="productForm.get('brand')?.errors?.['required']">
+            Brand is required
+          </mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="form-section">
+      <h3>Sizes and Stock</h3>
+      <div  formArrayName="sizes" class="size-grid">
+        <div *ngFor="let size of availableSizes;  let i = index" 
+             [formGroupName]="i" 
+             class="size-item">
+          <div class="size-name">{{size}}</div>
+          <div class="size-stock">
+            <label>Stock:</label>
+            <input type="number" formControlName="stock" min="0">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Details Arrays -->
+    <div class="form-section">
+      <h3>Size & Fit Information</h3>
+      <div formArrayName="sizeAndFit">
+        <div *ngFor="let item of sizeAndFitFormArray.controls; let i = index" class="array-item">
+          <input [formControlName]="i" placeholder="Enter size & fit detail">
+          <button type="button" mat-icon-button color="warn" (click)="removeArrayItem(sizeAndFitFormArray, i)">
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+        </div>
+        <button type="button" mat-stroked-button (click)="addSizeAndFit()">
+          Add Size & Fit Detail
+        </button>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Material & Care</h3>
+      <div formArrayName="materialCare">
+        <div *ngFor="let item of materialCareFormArray.controls; let i = index" class="array-item">
+          <input [formControlName]="i" placeholder="Enter material & care instruction">
+          <button type="button" mat-icon-button color="warn" (click)="removeArrayItem(materialCareFormArray, i)">
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+        </div>
+        <button type="button" mat-stroked-button (click)="addMaterialCare()">
+          Add Care Instruction
+        </button>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Product Details</h3>
+      <div formArrayName="productDetails">
+        <div *ngFor="let item of productDetailsFormArray.controls; let i = index" class="array-item">
+          <input [formControlName]="i" placeholder="Enter product detail">
+          <button type="button" mat-icon-button color="warn" (click)="removeArrayItem(productDetailsFormArray, i)">
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+        </div>
+        <button type="button" mat-stroked-button (click)="addProductDetail()">
+          Add Product Detail
+        </button>
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label>Delivery Information</label>
+      <input matInput formControlName="deliveryInfo">
+    </div>
+
+    <div class="form-field">
+      <mat-checkbox formControlName="isActive">Product Active</mat-checkbox>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" mat-stroked-button (click)="onClose()">Cancel</button>
+      <button type="submit" mat-raised-button color="primary" [disabled]="productForm.invalid || isSubmitting">
+        {{ data?.mode === 'edit' ? 'Update' : 'Add' }} Product
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,19 @@
+# Ignore Angular cache
+ecommerce/.angular/cache/
+
+# Ignore Node modules
+node_modules/
+backend/node_modules/
+ecommerce/node_modules/
+
+# Ignore environment files
+.env
+backend/.env
+ecommerce/.env
+
+# Optional: Ignore build directories
+dist/
+ecommerce/dist/
+backend/dist/
+
+.codegpt

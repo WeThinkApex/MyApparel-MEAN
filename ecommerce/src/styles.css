@@ -1,0 +1,96 @@
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__surface {
+    --mdc-snackbar-container-color: #0d8808 !important;
+    color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__actions .mat-mdc-button {
+    color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__surface {
+    --mdc-snackbar-container-color: #f44336 !important;
+    color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__actions .mat-mdc-button {
+    color: #fff !important;
+}
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__actions .mat-mdc-button:hover {
+    background-color: transparent!important; 
+    color: white !important; 
+}
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__actions .mat-mdc-button:hover {
+    background-color : transparent !important; /* Subtle hover effect */
+    color: white !important; 
+} 
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center; 
+    padding: 0 16px;
+}
+
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-label {
+    flex-grow: 1;
+    margin-right: 16px;
+    font-weight: 500 !important;
+}
+
+.mat-mdc-snack-bar-container .mat-mdc-button {
+    margin: 0;
+    padding: 6px 8px;
+    height: auto;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.shared-container {
+    padding: 12px 20px;
+    max-width: 1440px;
+    margin: 0 auto;
+    box-sizing: border-box; 
+  }
+  .centered-dialog .mat-dialog-container {
+    padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .centered-dialog {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Scrollbar styling */
+  .centered-dialog .mat-dialog-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .centered-dialog .mat-dialog-container::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 3px;
+  }
+  
+  .centered-dialog .mat-dialog-container::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+
+@import '@angular/material/prebuilt-themes/indigo-pink.css';

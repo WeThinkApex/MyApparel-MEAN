@@ -1,0 +1,64 @@
+<section class="premium-boutiques">
+  <div class="container">
+    <h2 class="section-title">New Arrivals</h2>
+    
+    <div class="boutiques-grid">
+      <div *ngFor="let product of products" class="boutique-card">
+        <!-- Product Link Wrapper -->
+        <div class="product-link" (click)="navigateToProduct(product)">
+          <!-- Image Container -->
+          <div class="image-container">
+            <img [src]="product.mainImage" 
+                 [alt]="product.title" 
+                 (error)="handleImageError($event)" 
+                 class="card-image">
+          </div>
+
+          <!-- Product Details -->
+          <div class="card-content">
+            <div class="product-title-block">
+              <h3>{{ product.brand }}:  <span>{{ product.title }}</span></h3>
+            </div>
+            
+            <div class="price-details">
+              <div class="price-container">
+                <span class="current-price">₹{{ product.price }}</span>
+                <span class="original-price">₹{{ product.originalPrice }}</span>
+                <span class="discount">({{ calculateDiscount(product) }}% OFF)</span>
+              </div>
+              <div class="delivery-info">
+                Get it {{ product.deliveryInfo }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hover Content -->
+        <div class="hover-content" (click)="navigateToProduct(product)">
+          <div class="size-list">
+            <span class="size-item" 
+                  *ngFor="let size of getLimitedSizes(product.sizes, 3)" 
+                  [class.out-of-stock]="size.stock === 0"
+                  [title]="size.stock === 0 ? 'Out of Stock' : size.stock + ' items left'">
+              {{ size.name }}
+              <!-- <small *ngIf="size.stock > 0" class="stock-info">({{ size.stock }})</small> -->
+            </span>
+            <span *ngIf="product.sizes.length > 3" class="more-sizes">
+              +{{ product.sizes.length - 3 }} more
+            </span>
+          </div>
+
+          <!-- <button class="add-to-cart-btn" 
+                  (click)="addToCart(product, $event)"
+                  [disabled]="isOutOfStock(product)">
+            {{ getButtonText(product) }}
+          </button> -->
+          <button class="add-to-cart-btn" 
+                  >
+            {{ getButtonText(product) }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
