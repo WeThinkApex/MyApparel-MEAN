@@ -134,18 +134,17 @@
   font-size: 18px;
 }
 
-.sizes-grid {
+.size-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
 }
 
 .size-item {
-  padding: 12px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  background: white;
+  text-align: center;
 }
 
 .size-name {
@@ -153,9 +152,15 @@
   margin-bottom: 8px;
 }
 
+.size-stock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .size-stock input {
   width: 100%;
-  padding: 8px;
+  padding: 4px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }

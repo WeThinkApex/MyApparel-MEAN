@@ -49,23 +49,25 @@
     </div>
 
     <!-- Size Selection -->
-    <div class="size-section">
-      <div class="size-header">
-        <h3>Size</h3>
-      </div>
+<div class="size-section">
+  <div class="size-header">
+    <h3>Size</h3>
+  </div>
 
-      <div class="size-grid">
-        <button *ngFor="let size of product.sizes || []"
-                class="size-button"
-                [class.selected]="selectedSize === size.name"
-                [class.out-of-stock]="size.stock === 0"
-                (click)="selectSize(size)">
-          <span class="size-name">{{size.name}}</span>
-          <span class="stock-info" *ngIf="size.stock > 0">{{size.stock}} left</span>
-          <span class="out-of-stock-text" *ngIf="size.stock === 0">Out of Stock</span>
-        </button>
-      </div>
-    </div>
+  <div class="size-grid">
+    <button *ngFor="let size of product.sizes"
+            class="size-button"
+            [class.selected]="selectedSize === size.name"
+            [class.disabled]="size.stock === 0"
+            [disabled]="size.stock === 0"
+            (click)="selectSize(size)">
+      <span class="size-name">{{size.name}}</span>
+      <span class="stock-left" *ngIf="shouldShowStock(size)">
+        {{size.stock}} left
+      </span>
+    </button>
+  </div>
+</div>
 
     <!-- Delivery Section -->
     <div class="delivery-section">

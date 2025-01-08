@@ -99,9 +99,11 @@
     </div>
     <div class="form-section">
       <h3>Sizes and Stock</h3>
-      <div formArrayName="sizes" class="sizes-grid">
-        <div *ngFor="let sizeControl of sizesFormArray.controls; let i = index" [formGroupName]="i" class="size-item">
-          <div class="size-name">{{sizeControl.get('name')?.value}}</div>
+      <div  formArrayName="sizes" class="size-grid">
+        <div *ngFor="let size of availableSizes;  let i = index" 
+             [formGroupName]="i" 
+             class="size-item">
+          <div class="size-name">{{size}}</div>
           <div class="size-stock">
             <label>Stock:</label>
             <input type="number" formControlName="stock" min="0">

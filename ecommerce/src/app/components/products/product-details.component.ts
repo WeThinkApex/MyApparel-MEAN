@@ -124,10 +124,11 @@ export class ProductDetailsComponent implements OnInit {
     if (size.stock > 0) {
       this.selectedSize = size.name;
       this.inStock = true;
-    } else {
-      this.showNotifyModal = true;
-      this.inStock = false;
     }
+  }
+
+  shouldShowStock(size: Size): boolean {
+    return size.stock > 0 && size.stock < 10;
   }
 
   calculateDiscount(price: number, originalPrice: number): number {

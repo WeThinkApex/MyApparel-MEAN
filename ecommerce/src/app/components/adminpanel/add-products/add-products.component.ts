@@ -27,7 +27,11 @@ export class AddProductDialogComponent implements OnInit {
     { value: 'BOYS FASHION', label: 'Boys Fashion' },
   ];
   removedImageUrls: string[] = [];
-  availableSizes = ['2Y', '3Y', '4Y', '5Y', '6Y', '7Y', '8Y', '9Y', '10Y'];
+  availableSizes = [
+    '1-2Y', '2-3Y', '3-4Y', '4-5Y', '5-6Y', 
+    '6-7Y', '7-8Y', '8-9Y', '9-10Y', '10-11Y', 
+    '11-12Y', '12-13Y', '13-14Y'
+  ];
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddProductDialogComponent>,
