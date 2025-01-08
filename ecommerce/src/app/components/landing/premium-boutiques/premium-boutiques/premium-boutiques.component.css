@@ -1,5 +1,5 @@
 .premium-boutiques {
-  padding: 40px 0;
+  padding: 0px 0 40px;
   background-color: #fff;
 }
 
@@ -18,7 +18,7 @@
 
 .boutiques-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 24px;
 }
 
@@ -35,8 +35,8 @@
 
 .image-container {
   position: relative;
-  padding-top: 87.33%; 
-    overflow: hidden;
+  padding-top: 123.33%;; 
+  overflow: hidden;
 }
 
 .card-image {
@@ -55,9 +55,28 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between; 
-}
+ }
+ .product-title-block {
+  flex-grow: 1;
+  margin-bottom: -13px;
+  max-width: 200px;
 
-.product-title-block {
+  h3 {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 21px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+    span {
+      font-weight: normal;
+    }
+  }
+}
+/*.product-title-block {
   flex-grow: 1; 
   margin-bottom: 8px;
 }
@@ -80,7 +99,7 @@
   height: 2.8em; 
   color: #666;
   margin: 0;
-}
+} */
 
 .price-details {
   flex-shrink: 0; 

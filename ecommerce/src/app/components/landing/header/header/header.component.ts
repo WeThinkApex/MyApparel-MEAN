@@ -10,7 +10,7 @@ import { AccountDialogComponent } from '../../account-dialog/account-dialog.comp
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  logoUrl: string = 'assets/images/logo.png';
+  logoUrl: string = 'assets/images/my-apparel.svg';
   cartItemCount: number = 0;
   isAuthenticated = false;
   user: { name: string, email: string } = { name: '', email: '' };
