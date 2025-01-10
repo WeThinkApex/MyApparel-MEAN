@@ -21,20 +21,19 @@
     
     <!-- Main Image Display -->
     <div class="main-image-container">
-      <img [src]="product.images[currentImageIndex].url" 
-           [alt]="product.images[currentImageIndex].alt" 
-           class="main-product-image"
-           (mousemove)="onMouseMove($event)"
-           (mouseenter)="onMouseEnter()"
-           (mouseleave)="onMouseLeave()">
-           <div class="zoom-container" *ngIf="showZoom && product" (mousemove)="onMouseMove($event)">
-            <img [src]="product.images[currentImageIndex].url" class="zoom-image" [ngStyle]="zoomImageStyle">
-          </div>
+      <img
+        [src]="product.images[currentImageIndex].url"
+        [alt]="product.images[currentImageIndex].alt"
+        class="main-product-image"
+        imageZoom
+        [imageUrl]="product.images[currentImageIndex].url"
+        [zoomLevel]="2"
+        (zoomState)="onZoomStateChange($event)">
     </div>
   </div>
 
   <!-- Right Side - Product Information -->
-  <div class="product-info" [class.hidden]="showZoom">
+  <div class="product-info" *ngIf="!isZoomActive">
     <!-- Basic Info -->
     <div class="brand-name">{{product.brand}}</div>
     <h1 class="product-title">{{product.title}}</h1>
@@ -70,7 +69,7 @@
 </div>
 
     <!-- Delivery Section -->
-    <div class="delivery-section">
+    <!-- <div class="delivery-section">
       <h3>Delivery To</h3>
       <div class="pincode-checker">
         <input type="text" 
@@ -96,7 +95,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Add to Cart Button -->
     <button class="add-to-cart-btn"
@@ -106,15 +105,15 @@
     </button>
 
     <!-- Wishlist Button -->
-    <button class="wishlist-btn" (click)="toggleWishlist()">
+    <!-- <button class="wishlist-btn" (click)="toggleWishlist()">
       <i [class]="isInWishlist ? 'fas fa-heart' : 'far fa-heart'"></i>
       {{isInWishlist ? 'WISHLISTED' : 'WISHLIST'}}
-    </button>
+    </button> -->
 
     <!-- Product Details Accordion -->
-    <mat-accordion class="product-details-accordion">
+    <!-- <mat-accordion class="product-details-accordion"> -->
       <!-- Size & Fit Panel -->
-      <mat-expansion-panel>
+      <!-- <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <div class="panel-title-content">
@@ -132,10 +131,10 @@
             </li>
           </ul>
         </div>
-      </mat-expansion-panel>
+      </mat-expansion-panel> -->
     
       <!-- Material & Care Panel -->
-      <mat-expansion-panel>
+      <!-- <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <div class="panel-title-content">
@@ -153,10 +152,10 @@
             </li>
           </ul>
         </div>
-      </mat-expansion-panel>
+      </mat-expansion-panel> -->
     
       <!-- Product Details Panel -->
-      <mat-expansion-panel>
+      <!-- <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <div class="panel-title-content">
@@ -175,7 +174,7 @@
           </ul>
         </div>
       </mat-expansion-panel>
-    </mat-accordion>
+    </mat-accordion> -->
   </div>
   
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AdminPanelSService } from '../adminpanel/adminpanel.service';
 import { environment } from 'environment';
@@ -39,21 +39,19 @@ interface Product {
   styleUrls: ['./product-details.component.css']
 })
 export class ProductDetailsComponent implements OnInit {
+  @ViewChild('zoomContainer', { static: true }) zoomContainer!: ElementRef;
 
   product: Product | undefined;
   currentImageIndex: number = 0;
   selectedSize: string | null = null;
   pincode: string = '';
   deliveryInfo: DeliveryInfo | null = null;
-  showSizeChart: boolean = false;
   showNotifyModal: boolean = false;
   isInWishlist: boolean = false;
   notificationEmail: string = '';
   notificationPhone: string = '';
   inStock: boolean = true;
-  showZoom = false;
-  zoomStyle: { [key: string]: string } = {};
-  zoomImageStyle: { [key: string]: string } = {};
+  isZoomActive: boolean = false;
   expandedSections = {
     sizeAndFit: false,
     materialCare: false,
@@ -61,7 +59,10 @@ export class ProductDetailsComponent implements OnInit {
   };
   private imgURL = `${environment.imgURL}`;
 
-  constructor(private route: ActivatedRoute, private productService: AdminPanelSService,) { }
+  constructor(
+    private route: ActivatedRoute, 
+    private productService: AdminPanelSService
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -69,29 +70,8 @@ export class ProductDetailsComponent implements OnInit {
       this.loadProductDetails(productId);
     });
   }
-  
-  
-  onMouseMove(event: MouseEvent) {
-    if (!this.showZoom) return;
-  
-    const containerRect = (event.target as HTMLElement).getBoundingClientRect();
-    const x = event.clientX - containerRect.left;
-    const y = event.clientY - containerRect.top;
-    
-    const zoomX = (x / containerRect.width) * 100;
-    const zoomY = (y / containerRect.height) * 100;
-  
-    this.zoomImageStyle = {
-      transform: `translate(-${zoomX}%, -${zoomY}%) scale(2)`
-    };
-  }
-  
-  onMouseEnter() {
-    this.showZoom = true;
-  }
-  
-  onMouseLeave() {
-    this.showZoom = false;
+  onZoomStateChange(zoomActive: boolean) {
+    this.isZoomActive = zoomActive;
   }
   loadProductDetails(productId: string) {
     this.productService.getProduct(productId).subscribe({
@@ -108,7 +88,6 @@ export class ProductDetailsComponent implements OnInit {
           ...product,
           images: [mainImage, ...additionalImages]
         };
-        console.log("additional images",this.product)
       },
       error: (error) => {
         console.error('Error loading product:', error);
@@ -124,6 +103,9 @@ export class ProductDetailsComponent implements OnInit {
     if (size.stock > 0) {
       this.selectedSize = size.name;
       this.inStock = true;
+    } else {
+      this.showNotifyModal = true;
+      this.inStock = false;
     }
   }
 
@@ -136,26 +118,17 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   isOutOfStock(product: Product): boolean {
-    return !(product.sizes?.some((s) => s.stock > 0));
+    return !product.sizes?.some((s) => s.stock > 0);
   }
 
   checkDelivery() {
     if (this.pincode.length === 6) {
-      // Simulate API call for delivery check
       this.deliveryInfo = {
         estimatedDate: 'Saturday, Jan 11',
         isAvailable: true,
         isCodAvailable: true
       };
     }
-  }
-
-  openSizeChart() {
-    this.showSizeChart = true;
-  }
-
-  closeSizeChart() {
-    this.showSizeChart = false;
   }
 
   closeNotifyModal() {
@@ -165,7 +138,6 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   submitNotification() {
-    // Implement notification signup logic
     console.log('Notification submitted:', {
       email: this.notificationEmail,
       phone: this.notificationPhone
@@ -175,18 +147,12 @@ export class ProductDetailsComponent implements OnInit {
 
   toggleWishlist() {
     this.isInWishlist = !this.isInWishlist;
-    // Implement wishlist logic
-  }
-
-  toggleSection(section: keyof typeof this.expandedSections) {
-    this.expandedSections[section] = !this.expandedSections[section];
   }
 
   addToCart() {
-    if (this.selectedSize && this.inStock) {
-      // Implement add to cart logic
+    if (this.selectedSize && this.inStock && this.product) {
       console.log('Adding to cart:', {
-        product: this.product?.title,
+        product: this.product.title,
         size: this.selectedSize
       });
     }

@@ -4,11 +4,12 @@ import { ProductDetailsComponent } from './product-details.component';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { ImageZoomDirective } from '../directives/image-zoom.directive';
 
 @NgModule({
   declarations: [
-    ProductDetailsComponent
+    ProductDetailsComponent,
+    ImageZoomDirective
   ],
   imports: [
     CommonModule,
