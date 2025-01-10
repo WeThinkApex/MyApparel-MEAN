@@ -1,6 +1,15 @@
 <!-- header.component.html -->
 <header class="main-header">
-  <div class="nav-container">
+  <div class="nav-container" *ngIf="showAdminHeader">
+    <div class="logo-container">
+      <img [src]="logoUrl" (click)="navigateHome()" alt="Logo">
+    </div>
+    <div class="admin-welcome">
+      <h1>Welcome to Admin Dashboard</h1>
+    </div>
+  </div>
+  
+  <div class="nav-container" *ngIf="!showAdminHeader">
     <div class="logo-container">
       <img [src]="logoUrl" (click)="navigateHome()" alt="Logo">
     </div>
@@ -22,7 +31,8 @@
     <div class="user-actions">
 
 <div *ngIf="isAuthenticated">
-      <button mat-button  (click)="openAccountDialog($event)">
+      <!-- <button mat-button  (click)="openAccountDialog($event)"> -->
+      <button mat-button  >
         <mat-icon>person</mat-icon>
         <span>My Account</span>
       </button>

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AccountDialogComponent } from '../../account-dialog/account-dialog.component';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +14,9 @@ export class HeaderComponent implements OnInit {
   logoUrl: string = 'assets/images/my-apparel.svg';
   cartItemCount: number = 0;
   isAuthenticated = false;
+  isAdmin = false;
+  isAdminRoute = false;
+  showAdminHeader = false
   user: { name: string, email: string } = { name: '', email: '' };
   
   categories = [
@@ -26,7 +30,14 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private dialog: MatDialog
-  ) {}
+  ) {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.isAdminRoute = event.url.includes('/admin');
+      this.checkHeaderView();
+    });
+  }
 
   ngOnInit(): void {
     this.isAuthenticated = this.authService.isAuthenticated();
@@ -38,12 +49,21 @@ export class HeaderComponent implements OnInit {
           name: currentUser.name, 
           email: currentUser.email 
         };
+        this.isAdmin = currentUser.isAdmin;
+        this.checkHeaderView();
       }
     }
   }
 
-  navigateHome() {
-    this.router.navigate(['/']);
+  navigateHome(): void {
+    if (this.isAdmin && this.isAdminRoute) {
+      this.router.navigate(['/admin/dashboard']);
+    } else {
+      this.router.navigate(['/home']);
+    }
+  }
+  checkHeaderView(): void {
+    this.showAdminHeader = this.isAdmin && this.isAdminRoute;
   }
 
   openAccountDialog(event: MouseEvent) {

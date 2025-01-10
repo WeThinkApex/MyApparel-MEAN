@@ -7,7 +7,31 @@
   background: white;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+/* Admin Header*/
+.admin-welcome {
+  flex: 1;
+  text-align: center;
+}
 
+.admin-welcome h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 500;
+}
+
+.nav-container.admin {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.admin .logo-container img {
+  height: 40px;
+}
+
+/* User Header */
 .nav-container {
   display: flex;
   justify-content: space-between;
