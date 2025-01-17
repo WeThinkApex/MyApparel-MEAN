@@ -19,6 +19,7 @@ import { RegisterComponent } from '../authentication/register/register.component
 import { AccountDialogComponent } from './account-dialog/account-dialog.component';
 import { AppComponent } from '../../app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { FooterComponent } from './footer/footer/footer.component';
 // import { NewarrivalsComponent } from './newarrivals/newarrivals/newarrivals.component';
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
     PremiumBoutiquesComponent,
     AccountDialogComponent,
     NavMenuComponent,
+    FooterComponent,
     // NewarrivalsComponent
   ],
   imports: [
@@ -44,7 +46,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
     MatDialogModule,
    
   ],
-  exports: [HeaderComponent],
+  exports: [HeaderComponent,FooterComponent,PremiumBoutiquesComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -1,8 +1,8 @@
 <!-- Product Navigation Breadcrumb -->
 <nav class="breadcrumb-container">
   <div class="breadcrumb shared-container ">
-    <a href="/">Home</a> /
-    <span>{{product?.title || 'Product Details'}}</span>
+    <a href="/">Home / </a>
+    <span>  {{product?.title || 'Product Details'}}</span>
   </div>
 </nav>
 
@@ -203,4 +203,7 @@
       </form>
     </div>
   </div>
+</div>
+<div class="premiumClass">
+  <app-premium-boutiques [isFromProductPage]="true"></app-premium-boutiques>
 </div>

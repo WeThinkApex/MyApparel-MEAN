@@ -43,7 +43,7 @@ router.post('/register', async (req, res) => {
         role: user.role 
       }, 
       process.env.JWT_SECRET, 
-      { expiresIn: '1h' }
+      { expiresIn: '10d' }
     );
 
     // Send response
@@ -88,7 +88,7 @@ router.post('/login', async (req, res) => {
         role: user.role 
       }, 
       process.env.JWT_SECRET, 
-      { expiresIn: '1h' }
+      { expiresIn: '10d' }
     );
 
     res.json({ 

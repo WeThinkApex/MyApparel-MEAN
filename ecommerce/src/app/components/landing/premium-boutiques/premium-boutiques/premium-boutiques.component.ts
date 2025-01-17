@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'environment';
 import { AdminPanelSService } from 'src/app/components/adminpanel/adminpanel.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 interface Product {
+  _id: string;
   brand: string;
   title: string;
+  description: string;
   mainImage: string;
   price: number;
   originalPrice: number;
@@ -27,6 +29,8 @@ interface Product {
 export class PremiumBoutiquesComponent {
   products: Product[] = [];
   isLoading = false;
+  // innerPage = true;
+  @Input() isFromProductPage: boolean = false;
   private imgURL = `${environment.imgURL}`;
   constructor(private router: Router, private productService: AdminPanelSService, private snackbar: SnackbarService
   ) { }
@@ -34,6 +38,8 @@ export class PremiumBoutiquesComponent {
 
   ngOnInit() {
     this.loadProducts();
+
+    console.log("visFromProductPage",this.isFromProductPage)
   }
   loadProducts() {
     this.isLoading = true;
@@ -84,7 +90,7 @@ export class PremiumBoutiquesComponent {
     // Add your cart logic here
     console.log('Adding to cart:', card.title);
   }
-
+ 
   calculateDiscount(product: { originalPrice: number; price: number; }) {
     const discount = ((product.originalPrice - product.price) / product.originalPrice) * 100;
     return Math.round(discount);

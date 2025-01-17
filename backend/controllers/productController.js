@@ -96,10 +96,7 @@ exports.getProducts = async (req, res) => {
     }
 
     const products = await Product.find(query)
-      .sort(sortObj)
-      .skip(skip)
-      .limit(Number(limit));
-
+  
     const total = await Product.countDocuments(query);
 
     res.json({
@@ -202,20 +199,27 @@ exports.deleteProduct = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    // Delete all associated images
-    const imagePaths = [
-      product.mainImage,
-      ...product.images.map(img => img.url)
-    ];
-
-    for (const imagePath of imagePaths) {
-      const fullPath = path.join(__dirname, '..', 'public', imagePath);
-      await fs.unlink(fullPath).catch(console.error);
+    const imagesToDelete = [];
+    if (product.mainImage) {
+      imagesToDelete.push(product.mainImage);
+    }
+    if (product.additionalImages && product.additionalImages.length > 0) {
+      imagesToDelete.push(...product.additionalImages);
+    }
+    for (const imagePath of imagesToDelete) {
+      try {
+        const cleanPath = imagePath.replace(/^\/uploads\/products\//, '');
+        const fullPath = path.join(__dirname, '..', 'public', 'uploads', 'products', cleanPath);
+        await fs.unlink(fullPath).catch(console.error);
+      } catch (unlinkError) {
+        console.error(`Error deleting image ${imagePath}:`, unlinkError);
+      }
     }
     await product.deleteOne();
     res.json({ message: 'Product removed successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Delete product error:', error);
+    res.status(500).json({ message: 'Error deleting product', error: error.message });
   }
 };
 

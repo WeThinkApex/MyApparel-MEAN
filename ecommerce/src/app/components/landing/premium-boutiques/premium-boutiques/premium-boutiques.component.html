@@ -1,6 +1,6 @@
 <section class="premium-boutiques">
   <div class="container">
-    <div  class="section-title"> 
+    <div  class="section-title" *ngIf="!isFromProductPage"> 
     <h2>Mini Marvels, Mighty Style</h2>
     <p>Outfits that keep up with your child’s energy, from morning giggles to bedtime cuddles.</p>
   </div>
@@ -19,7 +19,7 @@
           <!-- Product Details -->
           <div class="card-content">
             <div class="product-title-block">
-              <h3>{{ product.brand }}:  <span>{{ product.title }}</span></h3>
+              <h3>{{ product.brand }}:  <span>{{ product.description }}</span></h3>
             </div>
             
             <div class="price-details">
@@ -46,7 +46,7 @@
               <!-- <small *ngIf="size.stock > 0" class="stock-info">({{ size.stock }})</small> -->
             </span>
             <span *ngIf="product.sizes.length > 3" class="more-sizes">
-              +{{ product.sizes.length - 3 }} more
+              +{{ product.sizes.length - 3 }}more
             </span>
           </div>
 

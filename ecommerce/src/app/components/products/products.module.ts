@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ImageZoomDirective } from '../directives/image-zoom.directive';
+import { HomeModule } from '../landing/home.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ImageZoomDirective } from '../directives/image-zoom.directive';
     CommonModule,
     FormsModule,
     MatExpansionModule,
-    MatIconModule
+    MatIconModule,
+    HomeModule
   ]
 })
 export class ProductsModule { }

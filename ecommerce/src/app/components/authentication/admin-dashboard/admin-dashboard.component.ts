@@ -39,6 +39,7 @@ interface Product {
 export class AdminDashboardComponent implements OnInit {
   products: Product[] = [];
   isLoading = false;
+  isAuthenticated = false;
   private imgURL = `${environment.imgURL}`;
   constructor(
     private router: Router,
@@ -141,6 +142,8 @@ export class AdminDashboardComponent implements OnInit {
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    this.snackbar.successSnackBar('Admin Logged Out Successfully')
+    this.isAuthenticated = false;
+    this.router.navigate(['admin/login']);
   }
 }

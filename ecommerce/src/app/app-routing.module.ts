@@ -11,9 +11,10 @@ import { ProductDetailsComponent } from './components/products/product-details.c
 const routes: Routes = [
   { path: 'home', component: HomeComponent },  
   { path: '', redirectTo: '/home', pathMatch: 'full' },  
-  { path: 'login', component: LoginComponent }, 
-  { path: 'register', component: RegisterComponent }, 
-  { path: 'register/admin', component: RegisterComponent },
+  { path: 'admin/login', component: LoginComponent }, 
+  // <!-- In Future use -->
+  // { path: 'register', component: RegisterComponent }, 
+  // { path: 'register/admin', component: RegisterComponent },
   {
     path: 'admin',
     loadChildren: () => import('./components/authentication/auth.module').then(m => m.AuthModule),

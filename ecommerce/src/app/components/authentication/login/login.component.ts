@@ -21,7 +21,7 @@ export class LoginComponent {
       (user:any) => {
         if (user.role === 'admin') {
           this.snackBar.successSnackBar('Admin login successful!')
-          this.router.navigate(['/admin/dashboard']); // Navigate to the admin dashboard
+          this.router.navigate(['admin/dashboard']); // Navigate to the admin dashboard
         } else {
           this.snackBar.successSnackBar('Login successful!')
           this.router.navigate(['/']);
