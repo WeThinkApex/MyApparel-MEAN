@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "homepage": "https://myapparel.in",
+  "homepage": "https://myapparel.in/demo",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
