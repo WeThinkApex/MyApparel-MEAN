@@ -20,6 +20,7 @@ import { AccountDialogComponent } from './account-dialog/account-dialog.componen
 import { AppComponent } from '../../app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { FooterComponent } from './footer/footer/footer.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 // import { NewarrivalsComponent } from './newarrivals/newarrivals/newarrivals.component';
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import { FooterComponent } from './footer/footer/footer.component';
     FormsModule,
     HttpClientModule,
     MatDialogModule,
-   
+    MatSidenavModule
   ],
   exports: [HeaderComponent,FooterComponent,PremiumBoutiquesComponent],
   providers: [],

@@ -10,7 +10,7 @@ import { ProductDetailsComponent } from './components/products/product-details.c
 
 const routes: Routes = [
   { path: 'demo', component: HomeComponent },  
-  { path: '', redirectTo: '/demo', pathMatch: 'full' },  
+  // { path: '', redirectTo: '/demo', pathMatch: 'full' },  
   { path: 'admin/login', component: LoginComponent }, 
   // <!-- In Future use -->
   // { path: 'register', component: RegisterComponent }, 

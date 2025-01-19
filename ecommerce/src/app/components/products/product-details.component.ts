@@ -68,6 +68,7 @@ export class ProductDetailsComponent implements OnInit {
     this.route.params.subscribe(params => {
       const productId = params['id'];
       this.loadProductDetails(productId);
+      window.scrollTo(0, 0);
     });
   }
   onZoomStateChange(zoomActive: boolean) {

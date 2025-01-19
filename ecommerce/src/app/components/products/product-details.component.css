@@ -1,8 +1,8 @@
 /* Breadcrumb Styles */
 .breadcrumb-container {
-  padding: 16px 24px;
-  background: #fff;
-  margin-top: 100px;
+  padding: 16px 6px;
+    background: #fff;
+    margin-top: 45px
 }
 
 .breadcrumb {
@@ -402,7 +402,6 @@
 .main-product-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;
 }
 
 .product-info {
@@ -538,6 +537,9 @@ mat-expansion-panel {
   .zoom-container {
     display: none;
   }
+  .product-info {
+    margin-top: 40px
+   }
 }
 
 @media (max-width: 768px) {
@@ -549,5 +551,8 @@ mat-expansion-panel {
     flex-direction: row;
     overflow-x: auto;
   }
+  .product-info {
+    margin-top: 40px
+   }
 }
 
