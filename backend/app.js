@@ -18,7 +18,10 @@ if (!fs.existsSync(uploadDir)){
 }
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://myapparel.in',  // Your GoDaddy domain
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
