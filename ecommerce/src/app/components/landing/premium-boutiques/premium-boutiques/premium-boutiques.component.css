@@ -152,8 +152,8 @@
   flex-grow: 1;
   margin-bottom: -13px;
   max-width: 200px;
-
-  h3 {
+}
+  .product-title-block  h3 {
     font-size: 13px;
     font-weight: 500;
     line-height: 21px;
@@ -162,12 +162,11 @@
     text-overflow: ellipsis;
     -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-
-    span {
+  }
+  .product-title-block   span {
       font-weight: normal;
     }
-  }
-}
+
 
 
 .price-details {

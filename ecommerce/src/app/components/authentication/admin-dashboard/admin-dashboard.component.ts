@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../../core/services/auth.service';
 import { AddProductDialogComponent } from '../../adminpanel/add-products/add-products.component';
 import { AdminPanelSService } from '../../adminpanel/adminpanel.service';
-import { environment } from 'environment';
+import { environment } from 'src/environments/environment';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 interface Product {

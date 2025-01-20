@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from 'environment';
+import { environment } from 'src/environments/environment';
 import { AdminPanelSService } from 'src/app/components/adminpanel/adminpanel.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
