@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -38,8 +38,15 @@ export class HeaderComponent implements OnInit {
       this.checkHeaderView();
     });
   }
+  isMobileView: boolean = false;
+  isMobileMenuOpen: boolean = false;
 
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkScreenSize();
+  }
   ngOnInit(): void {
+    this.checkScreenSize();
     this.isAuthenticated = this.authService.isAuthenticated();
     
     if (this.isAuthenticated) {
@@ -59,13 +66,21 @@ export class HeaderComponent implements OnInit {
     if (this.isAdmin && this.isAdminRoute) {
       this.router.navigate(['/admin/dashboard']);
     } else {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/demo']);
     }
   }
   checkHeaderView(): void {
-    this.showAdminHeader = this.isAdmin && this.isAdminRoute;
+    this.showAdminHeader = this.isAdmin || this.isAdminRoute;
   }
-
+   checkScreenSize() {
+    this.isMobileView = window.innerWidth <= 768;
+    if (!this.isMobileView) {
+      this.isMobileMenuOpen = false;
+    }
+  }
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
   openAccountDialog(event: MouseEvent) {
     event.stopPropagation();
     const dialogRef = this.dialog.open(AccountDialogComponent, {

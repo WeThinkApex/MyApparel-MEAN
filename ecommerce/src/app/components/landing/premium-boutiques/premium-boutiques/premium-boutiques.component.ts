@@ -97,7 +97,14 @@ export class PremiumBoutiquesComponent {
   }
   navigateToProduct(product: any) {
     const productId = product._id;
-    this.router.navigate(['/product', productId]);
+    const currentUrl = this.router.url;
+    if (currentUrl.includes('/product/')) {
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/product', productId]);
+      });
+    } else {
+      this.router.navigate(['/product', productId]);
+    }
   }
   getLimitedSizes(sizes: { name: string; stock: number; _id: string }[], limit: number) {
     return sizes.slice(0, limit);

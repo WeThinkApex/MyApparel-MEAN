@@ -18,10 +18,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminpanelModule } from './components/adminpanel/add-products/adminpanel.module';
 import { ProductsModule } from './components/products/products.module';
+import { SpinnerComponent } from './components/resuablecomponents/spinner/spinner.component';
+import { LoadingInterceptor } from './components/resuablecomponents/loading.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +50,11 @@ import { ProductsModule } from './components/products/products.module';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+    useClass: LoadingInterceptor,
+    multi: true
     }
   ],
   bootstrap: [AppComponent]
