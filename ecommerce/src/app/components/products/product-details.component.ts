@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AdminPanelSService } from '../adminpanel/adminpanel.service';
-import { environment } from 'environment';
+import { environment } from '../../../../src/environments/environment';
 
 interface ProductImage {
   url: string;

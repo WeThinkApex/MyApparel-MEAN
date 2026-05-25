@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminPanelSService } from '../adminpanel.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { environment } from 'environment';
+import { environment } from '../../../../../src/environments/environment';
 
 interface Size {
   name: string;

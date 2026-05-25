@@ -17,12 +17,9 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
-  "zone.js",
-  "src/polyfills.ts"
-],
-
-
-
+              "zone.js",
+              "src/polyfills.ts"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
@@ -36,6 +33,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
